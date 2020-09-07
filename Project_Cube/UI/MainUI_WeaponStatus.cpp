@@ -33,7 +33,22 @@ void UMainUI_WeaponStatus::Tick(float deltaTime)
 		return;
 	}
 
-	mCurrMagazine->SetText(FText::FromString(FString::FromInt(mWeapon->CurrMagazine)));
+	const float currMagazine = mWeapon->CurrMagazine;
+	const float maxMagazine = mWeapon->MaxMagazine;
+	const float magazinePer = currMagazine / maxMagazine;
+	mCurrMagazine->SetText(FText::FromString(FString::FromInt(currMagazine)));
+	if (magazinePer >= 0.5f)
+	{
+		mCurrMagazine->SetColorAndOpacity(mDefaultMagazineColor);
+	}
+	else if (magazinePer > 0.15f)
+	{
+		mCurrMagazine->SetColorAndOpacity(mLackMagazineColor);
+	}
+	else
+	{
+		mCurrMagazine->SetColorAndOpacity(mEmptyMagazineColor);
+	}
 }
 
 void UMainUI_WeaponStatus::Enabled(ABaseHero* hero)

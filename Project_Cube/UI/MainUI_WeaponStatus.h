@@ -15,6 +15,10 @@ class PROJECT_CUBE_API UMainUI_WeaponStatus : public UUserWidget
 	GENERATED_BODY()
 	
 private:
+	const FLinearColor mDefaultMagazineColor = FLinearColor(1.f, 1.f, 1.f, 0.5f);
+	const FLinearColor mLackMagazineColor = FLinearColor(1.f, 0.1f, 0.f, 0.5f);
+	const FLinearColor mEmptyMagazineColor = FLinearColor(1.f, 0.f, 0.f, 0.5f);
+
 	class ABaseHero* mBaseHero;
 	class ABaseWeapon* mWeapon;
 

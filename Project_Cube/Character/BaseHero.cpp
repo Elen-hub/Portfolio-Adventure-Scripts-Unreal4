@@ -98,6 +98,8 @@ void ABaseHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ABaseHero::AttackStart);
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ABaseHero::AttackEnd);
+	PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ABaseHero::Reload);
+	PlayerInputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &ABaseHero::Interaction);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ABaseHero::Jump);
 	PlayerInputComponent->BindAction("Select", EInputEvent::IE_Pressed, this, &ABaseHero::GetItem);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, mSprintFunction, &USprintFunction::SprintActivate);
@@ -188,6 +190,14 @@ void ABaseHero::Fire()
 	mCurrRecoil = FMath::Clamp(mCurrRecoil + mWeapon->Recoil, 0.f, mWeapon->MaxRecoil);
 	mTargetVerticalRecoil = -FMath::RandRange(mCurrRecoil * 0.5f, mCurrRecoil);
 	mTargetHorizonRecoil = FMath::RandRange(-mCurrRecoil, mCurrRecoil) * 0.5f;
+}
+void ABaseHero::Reload()
+{
+
+}
+void ABaseHero::Interaction()
+{
+
 }
 void ABaseHero::MoveForward(float axis)
 {

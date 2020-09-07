@@ -32,7 +32,6 @@ public:
 	float FullAutoSpeed;
 	UPROPERTY(EditAnywhere, Category = "Item | Stat")
 	float ReloadSpeed;
-	bool BReloading;
 	UPROPERTY(EditAnywhere, Category = "Item | Stat")
 	float Recoil;
 	UPROPERTY(EditAnywhere, Category = "Item | Stat")

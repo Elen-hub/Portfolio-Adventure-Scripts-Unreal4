@@ -26,19 +26,23 @@ protected:
 	class ABaseWeapon* mWeapon;
 
 	bool mbIsFire;
+	float mAutoFireDelay;
 
 	float mTargetVerticalRecoil;
 	float mTargetHorizonRecoil;
 	float mCurrRecoil;
 	float mElapsedRecoil;
 
-	float mAutoFireDelay;
+	bool mbIsReloading;
+	float mElapsedReloadTime;
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void AttackStart();
 	virtual void AttackEnd();
 	virtual void Fire();
+	virtual void Reload();
+	virtual void Interaction();
 	virtual void MoveForward(float axis) override;
 	virtual void MoveSide(float axis) override;
 	virtual void Jump() override;
