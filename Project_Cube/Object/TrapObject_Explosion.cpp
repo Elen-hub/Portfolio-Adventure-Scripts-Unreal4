@@ -11,8 +11,7 @@
 ATrapObject_Explosion::ATrapObject_Explosion()
 {
 	mCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Event Collision"));
-	RootComponent = mCollision;
-	mMesh->SetupAttachment(GetRootComponent());
+	mCollision->SetupAttachment(GetRootComponent());
 
 	mParticleIdle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Idle Particle"));
 	mParticleIdle->SetupAttachment(GetRootComponent());

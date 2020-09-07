@@ -9,7 +9,8 @@ ABaseObject::ABaseObject()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
-	mMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
+	mMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh")); 
+	RootComponent = mMesh;
 }
 
 // Called when the game starts or when spawned

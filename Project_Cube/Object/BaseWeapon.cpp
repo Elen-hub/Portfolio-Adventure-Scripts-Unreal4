@@ -18,10 +18,6 @@ void ABaseWeapon::ActivateCollision(bool isActivate)
 {
 	mMesh->SetSimulatePhysics(isActivate);
 	mCollision->SetGenerateOverlapEvents(isActivate);
-	if(isActivate)
-		mMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	else
-		mMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 }
 
 void ABaseWeapon::Equip()

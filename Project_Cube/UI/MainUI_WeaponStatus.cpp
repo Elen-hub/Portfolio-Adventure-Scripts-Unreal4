@@ -21,7 +21,15 @@ void UMainUI_WeaponStatus::Tick(float deltaTime)
 	if (mWeapon == nullptr || mWeapon != mBaseHero->GetWeapon())
 	{
 		mWeapon = mBaseHero->GetWeapon();
-		mNameText->SetText(FText::FromString(mWeapon->Name));
+		if (mWeapon)
+		{
+			SetVisibility(ESlateVisibility::Visible);
+			mNameText->SetText(FText::FromString(mWeapon->Name));
+		}
+		else
+		{
+			SetVisibility(ESlateVisibility::Hidden);
+		}
 		return;
 	}
 

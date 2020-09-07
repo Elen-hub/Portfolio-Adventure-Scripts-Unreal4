@@ -10,15 +10,13 @@ AItem::AItem()
 {
 	Name = "TestItem";
 	mCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Event Collision"));
-	RootComponent = mCollision;
-	// mCollision->SetupAttachment(GetRootComponent());
+	mCollision->SetupAttachment(GetRootComponent());
 	mCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	mCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	mCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	// 메쉬 설정 (이벤트만사용, 타입은 월드다이나믹, 충돌관계는 폰과 겹칠때만)
-	mMesh->SetupAttachment(GetRootComponent());
 	mMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	mMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	mMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
