@@ -125,6 +125,7 @@ void ABaseHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MouseY", mPlayerCamera, &UPlayerCameraFunction::CameraMoveUp);
 	PlayerInputComponent->BindAxis("MouseWheel", mPlayerCamera, &UPlayerCameraFunction::CameraLook);
 }
+
 void ABaseHero::GetItem()
 {
 	AItem* item = mPlayerCamera->GetItemLookCrosshair();
@@ -212,7 +213,7 @@ void ABaseHero::Fire()
 	}
 	// 총알발사
 	ABullet* bullet = GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnActor<ABullet>(mBulletRefClass);
-	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot(), 0, 0, 0);
+	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot(), 0, 10, 0.1f);
 	mWeapon->CurrMagazine -= 1;
 
 	// 딜레이적용

@@ -24,6 +24,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Particle")
 	class UParticleSystem* mOverlapParticle;
 	const float mOverlapParticleScale = 0.25f;
+	float mDamage;
+	float mHitTime;
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;

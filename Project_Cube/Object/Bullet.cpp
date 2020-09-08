@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Project_Cube/Character/BaseMonster.h"
 
 ABullet::ABullet()
 {
@@ -49,6 +50,9 @@ void ABullet::Tick(float deltaTime)
 void ABullet::Enabled(FVector spawnPos, FVector direction, float speed, float damage, float hitTime)
 {
 	mDistanceAmount = 0;
+
+	mDamage = damage;
+	mHitTime = hitTime;
 	SetActorLocation(spawnPos);
 	mMovementComponent->Velocity = direction * mMovementComponent->InitialSpeed;
 	mMovementComponent->Activate();
@@ -65,4 +69,9 @@ void ABullet::Disabled()
 void ABullet::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, SweepResult.Location, mOverlapParticleScale);
+	ABaseMonster* monster = Cast<ABaseMonster>(OtherActor);
+	if (monster != nullptr)
+	{
+		monster->SetDamage(mDamage);
+	}
 }

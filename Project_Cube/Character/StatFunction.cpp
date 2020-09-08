@@ -34,3 +34,15 @@ FCombatStat* UStatFunction::GetStat()
 	return mBasicStat;
 }
 
+bool UStatFunction::SetDamage(float damage)
+{
+	// 체력이 0이하가 된다면 true리턴
+	mCurrHP -= damage;
+	if (mCurrHP <= 0)
+	{
+		mCurrHP = 0;
+		return true;
+	}
+	return false;
+}
+

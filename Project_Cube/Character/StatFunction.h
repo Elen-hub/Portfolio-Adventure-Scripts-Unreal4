@@ -30,4 +30,5 @@ public:
 	FCharacterInformation* GetInformation();
 	FCombatStat* GetStat();
 	FORCEINLINE float CurrHP() { return mCurrHP; }
+	bool SetDamage(float damage);
 };

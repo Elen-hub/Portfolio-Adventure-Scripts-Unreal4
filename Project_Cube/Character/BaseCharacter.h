@@ -19,6 +19,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Overlap Collision")
 	class USphereComponent* mOverlapCollision;
 	class UAnimMontage* mAnimationMontage;
+	UPROPERTY(VisibleAnywhere, Category = "State")
 	ECharacterState mCharacterState;
 	class UStatFunction* mStatFunction;
 	ABaseCharacter* mTarget;
@@ -48,7 +49,8 @@ public:
 	virtual void MoveForward(float axis) {};
 	virtual void MoveSide(float axis) {};
 	virtual void Jump() { Super::Jump(); };
-	virtual void SetDamage(float damage, float hitTime);
+	virtual void SetDamage(float damage);
 	virtual void SetHitTime(float hitTime);
 	virtual void SetNuckback(float force);
+	virtual void Death();
 };

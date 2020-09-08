@@ -16,6 +16,9 @@ ABaseCharacter::ABaseCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 
+	mMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	mMesh->SetupAttachment(GetRootComponent());
+
 	// 오버랩콜리전 기본설정 ( 충돌이벤트 사용안함, 충돌관계 모두 무시 )
 	mOverlapCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Overlap Collision"));
 	mOverlapCollision->SetupAttachment(GetRootComponent());
@@ -42,7 +45,7 @@ void ABaseCharacter::BeginPlay()
 }
 void ABaseCharacter::SetCharacterState(const ECharacterState nextState)
 {
-
+	mCharacterState = nextState;
 }
 void ABaseCharacter::Tick(float DeltaTime)
 {
@@ -56,9 +59,13 @@ void ABaseCharacter::Tick(float DeltaTime)
 	// mFunctionToStateMap[mCharacterState]->OnStateStay;
 }
 
-void ABaseCharacter::SetDamage(float damage, float hitTime)
+void ABaseCharacter::SetDamage(float damage)
 {
+	if (mCharacterState == ECharacterState::ECS_Death)
+		return;
 
+	if (mStatFunction->SetDamage(damage))
+		SetCharacterState(ECharacterState::ECS_Death);
 }
 
 void ABaseCharacter::SetHitTime(float hitTime)
@@ -74,4 +81,11 @@ void ABaseCharacter::SetHitTime(float hitTime)
 void ABaseCharacter::SetNuckback(float force)
 {
 
+}
+
+void ABaseCharacter::Death()
+{
+	mTarget = nullptr;
+	mMesh->SetGenerateOverlapEvents(false);
+	mOverlapCollision->SetGenerateOverlapEvents(false);
 }

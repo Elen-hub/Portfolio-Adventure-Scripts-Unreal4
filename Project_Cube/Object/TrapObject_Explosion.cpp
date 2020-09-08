@@ -40,6 +40,8 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 	if (!character)
 		return;
 
+	character->SetDamage(mDamage);
+
 	// 리스폰 전까진 이벤트를 받지않음
 	mCollision->SetGenerateOverlapEvents(false);
 
@@ -68,13 +70,7 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 void ATrapObject_Explosion::Explosion()
 {
 	if (mOverlapParticle)
-	{
 		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
-		//UParticleSystemComponent* particle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), mOverlapParticle, GetActorLocation(), FRotator(0.f), true);
-		//particle->SetWorldScale3D(FVector(mOverlapParticleSize));
-	}
-
-	// 데미지를 줘야함.
 }
 
 void ATrapObject_Explosion::Respawn()
