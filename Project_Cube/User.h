@@ -5,6 +5,7 @@
 #include "Project_Cube/GameInstance/MainGameInstance.h"
 #include "Project_Cube/GameInstance/UIMng.h"
 #include "Project_Cube/GameInstance/CharacterMng.h"
+#include "Project_Cube/GameInstance/SpawnMng.h"
 #include "CoreMinimal.h"
 #include "User.generated.h"
 
@@ -14,8 +15,8 @@ namespace System
 	const float ItemDefaultVolumeRange = 50.f;
 	const float InteractDefaultVolumeRange = 300.f;
 	const float ChaseDefaultMaxDistance = 800.f;
-	const float BulletDefaultSpeed = 2000.f;
-	const float BulletDefaultVolumeRange = 20.f;
+	const float BulletDefaultSpeed = 6000.f;
+	const float BulletDefaultVolumeRange = 10.f;
 }
 
 UENUM()

@@ -24,5 +24,4 @@ void UMainUI_Crosshair::Tick(float deltaTime)
 {
 	// 반동범위
 	mCrosshairImg->SetRenderScale(FVector2D(1 + mBaseHero->GetCurrRecoil() * 0.1f));
-	UE_LOG(LogTemp, Warning, TEXT("%f"), 1 + mBaseHero->GetCurrRecoil() * 0.1f)
 }

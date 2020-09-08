@@ -13,5 +13,5 @@ void UMainGameInstance::Init()
 
 	CharacterMng = NewObject<UCharacterMng>()->Init();
 	UIMng = NewObject<UUIMng>()->Init(this);
-	SpawnMng = NewObject<USpawnMng>()->Init();
+	SpawnMng = NewObject<USpawnMng>()->Init(this);
 }

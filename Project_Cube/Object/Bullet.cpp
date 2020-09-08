@@ -17,6 +17,7 @@ ABullet::ABullet()
 	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Overlap);
+	mCollision->SetGenerateOverlapEvents(true);
 	USphereComponent* sphere = Cast<USphereComponent>(mCollision);
 	sphere->InitSphereRadius(System::BulletDefaultVolumeRange);
 
@@ -26,8 +27,9 @@ ABullet::ABullet()
 	mMovementComponent->InitialSpeed = System::BulletDefaultSpeed;
 	mMovementComponent->MaxSpeed = System::BulletDefaultSpeed;
 	mMovementComponent->bRotationFollowsVelocity = true;
-	mMovementComponent->bShouldBounce = true;
-	mMovementComponent->Bounciness = 0.3f;
+	mMovementComponent->bShouldBounce = false;
+	mMovementComponent->ProjectileGravityScale = 1.f;
+	// mMovementComponent->Bounciness = 0.3f;
 }
 
 void ABullet::BeginPlay()
@@ -35,20 +37,33 @@ void ABullet::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ABullet::Tick(float deltaTime)
+{
+	Super::Tick(deltaTime);
+
+	mDistanceAmount += mMovementComponent->InitialSpeed * deltaTime;
+	if (mDistanceAmount > 40000.f)
+		Disabled();
+}
+
 void ABullet::Enabled(FVector spawnPos, FVector direction, float speed, float damage, float hitTime)
 {
+	mDistanceAmount = 0;
 	SetActorLocation(spawnPos);
-	mCollision->SetGenerateOverlapEvents(true);
 	mMovementComponent->Velocity = direction * mMovementComponent->InitialSpeed;
+	mMovementComponent->Activate();
+	SetActorHiddenInGame(false);
 }
 
 void ABullet::Disabled()
 {
-	mCollision->SetGenerateOverlapEvents(false);
+	UE_LOG(LogTemp, Warning, TEXT("Disabled"));
 	mMovementComponent->Velocity = FVector::ZeroVector;
+	mMovementComponent->Deactivate();
+	SetActorHiddenInGame(true);
 }
 
 void ABullet::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
+	GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, SweepResult.Location, mOverlapParticleScale);
 }

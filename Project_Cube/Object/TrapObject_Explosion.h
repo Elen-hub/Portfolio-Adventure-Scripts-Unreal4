@@ -22,10 +22,10 @@ protected:
 	class UParticleSystemComponent* mParticleIdle;
 
 	UPROPERTY(EditAnywhere, Category = "Trap | Particle")
-	class UParticleSystem* mParticleOverlap;
+	class UParticleSystem* mOverlapParticle;
 
 	UPROPERTY(EditAnywhere, Category = "Trap | Particle")
-	float mParticleOverlapSize;
+	float mOverlapParticleSize;
 
 	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
 	float mDamage;

@@ -52,6 +52,14 @@ AItem* UPlayerCameraFunction::GetItemLookCrosshair()
 	}
 	return nullptr;
 }
+FVector UPlayerCameraFunction::GetMuzzlePos()
+{
+	return mCamera->GetComponentLocation() + mCamera->GetForwardVector() * mCameraSpringArm->TargetArmLength;
+}
+FVector UPlayerCameraFunction::GetMuzzleRot()
+{
+	return mCamera->GetForwardVector();
+}
 void UPlayerCameraFunction::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

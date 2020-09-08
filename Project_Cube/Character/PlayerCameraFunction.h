@@ -14,24 +14,27 @@ class PROJECT_CUBE_API UPlayerCameraFunction : public UActorComponent
 
 public:
 	UPlayerCameraFunction();
-private:
-	class ABaseCharacter* mTargetCharacter;
-	float TMouseAxis;
-
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCamera")
-	class UCameraComponent* mCamera;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
-	class USpringArmComponent* mCameraSpringArm;
-	UPROPERTY()
-	class UMainGameInstance* mMainGameInstance;
-public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	UPlayerCameraFunction* Init(USpringArmComponent* springArm, UCameraComponent* camera);
-	void Set(ABaseCharacter* character, UMainGameInstance* gameInstance);
+	UPlayerCameraFunction* Init(class USpringArmComponent* springArm, class UCameraComponent* camera);
+	void Set(class ABaseCharacter* character, class UMainGameInstance* gameInstance);
 	void SetRebound(const float pitch, const float yaw);
 	void CameraMoveSide(float axis);
 	void CameraMoveUp(float axis);
 	void CameraLook(float rate);
 	class AItem* GetItemLookCrosshair();
+
+	FORCEINLINE FVector GetMuzzlePos();
+	FORCEINLINE FVector GetMuzzleRot();
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCamera")
+	UCameraComponent* mCamera;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
+	USpringArmComponent* mCameraSpringArm;
+	UPROPERTY()
+	UMainGameInstance* mMainGameInstance;
+private:
+	ABaseCharacter* mTargetCharacter;
+	float TMouseAxis;
+
 };

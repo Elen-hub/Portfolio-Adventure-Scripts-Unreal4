@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Project_Cube/User.h"
 #include "BaseHero.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -11,6 +10,7 @@
 #include "Project_Cube/GameInstance/MainGameInstance.h"
 #include "Components/SphereComponent.h"
 #include "Project_Cube/Object/BaseWeapon.h"
+#include "Project_Cube/Object/Bullet.h"
 #include "Engine/SkeletalMeshSocket.h"
 
 #include "Stat.h"
@@ -20,6 +20,9 @@
 ABaseHero::ABaseHero()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	FStringClassReference classRef("Blueprint'/Game/TestContent/Bullet_BP.Bullet_BP_C'");
+	mBulletRefClass = classRef.TryLoadClass<AActor>();
 
 	USpringArmComponent* springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
 	springArm->SetupAttachment(GetRootComponent());
@@ -165,19 +168,19 @@ void ABaseHero::Fire()
 {
 	if (!mWeapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Empty Weapon."));
 		mbIsFire = false;
 		return;
 	}
 	if (mWeapon->CurrMagazine <= 0)
 	{
 		// 총알이 없을경우
-		UE_LOG(LogTemp, Warning, TEXT("Empty Magazine."));
 		mbIsFire = false;
 		return;
 	}
 
 	// 총알발사
+	ABullet* bullet = GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnActor<ABullet>(mBulletRefClass);
+	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot(), 0, 0, 0);
 	mWeapon->CurrMagazine -= 1;
 
 	// 딜레이적용

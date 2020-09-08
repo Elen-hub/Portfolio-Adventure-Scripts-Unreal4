@@ -19,9 +19,14 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 	class UProjectileMovementComponent* mMovementComponent;
+	float mDistanceAmount;
+
+	UPROPERTY(EditAnywhere, Category = "Particle")
+	class UParticleSystem* mOverlapParticle;
+	const float mOverlapParticleScale = 0.25f;
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void Tick(float deltaTime) override;
 public:
 	void Enabled(FVector spawnPos, FVector direction, float speed, float damage, float hitTime);
 	void Disabled();

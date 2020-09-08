@@ -20,7 +20,7 @@ ATrapObject_Explosion::ATrapObject_Explosion()
 	mRespawnTime = 0.f;
 	mDamage = 0.f;
 
-	mParticleOverlapSize = 1.f;
+	mOverlapParticleSize = 1.f;
 }
 
 void ATrapObject_Explosion::BeginPlay()
@@ -67,10 +67,11 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 
 void ATrapObject_Explosion::Explosion()
 {
-	if (mParticleOverlap)
+	if (mOverlapParticle)
 	{
-		UParticleSystemComponent* particle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), mParticleOverlap, GetActorLocation(), FRotator(0.f), true);
-		particle->SetWorldScale3D(FVector(mParticleOverlapSize));
+		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
+		//UParticleSystemComponent* particle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), mOverlapParticle, GetActorLocation(), FRotator(0.f), true);
+		//particle->SetWorldScale3D(FVector(mOverlapParticleSize));
 	}
 
 	// 데미지를 줘야함.

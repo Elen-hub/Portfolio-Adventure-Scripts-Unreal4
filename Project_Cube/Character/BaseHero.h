@@ -25,6 +25,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	class ABaseWeapon* mWeapon;
 
+	UClass* mBulletRefClass;
+
 	bool mbIsFire;
 	float mAutoFireDelay;
 
