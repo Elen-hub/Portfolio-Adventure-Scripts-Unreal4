@@ -27,8 +27,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Trap | Particle")
 	float mOverlapParticleSize;
 
+	UPROPERTY(EditAnywhere, Category = "Trap | Range")
+	float mOverlapRadius;
+
 	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
 	float mDamage;
+
+	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
+	float mNuckbackForce;
 
 	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
 	bool mbUseDelay;

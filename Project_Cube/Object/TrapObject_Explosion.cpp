@@ -10,8 +10,12 @@
 
 ATrapObject_Explosion::ATrapObject_Explosion()
 {
-	mCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Event Collision"));
+	mOverlapRadius = 75.f;
+
+	USphereComponent* sphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Event Collision"));
+	mCollision = sphereCollision;
 	mCollision->SetupAttachment(GetRootComponent());
+	sphereCollision->InitSphereRadius(mOverlapRadius);
 
 	mParticleIdle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Idle Particle"));
 	mParticleIdle->SetupAttachment(GetRootComponent());
@@ -32,6 +36,7 @@ void ATrapObject_Explosion::BeginPlay()
 	mCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 	mCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	Cast<USphereComponent>(mCollision)->SetSphereRadius(mOverlapRadius);
 }
 
 void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -40,7 +45,9 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 	if (!character)
 		return;
 
+	const FVector direction = (OtherActor->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 	character->SetDamage(mDamage);
+	character->SetNuckback(direction, mNuckbackForce);
 
 	// 리스폰 전까진 이벤트를 받지않음
 	mCollision->SetGenerateOverlapEvents(false);
@@ -53,6 +60,12 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 	{
 		Explosion();
 	}
+}
+
+void ATrapObject_Explosion::Explosion()
+{
+	if (mOverlapParticle)
+		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
 
 	// 리스폰기능 사용.
 	if (mbUseRespawn)
@@ -65,12 +78,6 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 	{
 		Destroy();
 	}
-}
-
-void ATrapObject_Explosion::Explosion()
-{
-	if (mOverlapParticle)
-		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
 }
 
 void ATrapObject_Explosion::Respawn()

@@ -78,9 +78,11 @@ void ABaseCharacter::SetHitTime(float hitTime)
 	mbIsHit = true;
 }
 
-void ABaseCharacter::SetNuckback(float force)
+void ABaseCharacter::SetNuckback(FVector direction, float force)
 {
-
+	// mMesh->AddForce(direction * force);
+	UE_LOG(LogTemp, Warning, TEXT("%f"), force);
+	GetCharacterMovement()->AddImpulse(direction * force* 1000.f);
 }
 
 void ABaseCharacter::Death()

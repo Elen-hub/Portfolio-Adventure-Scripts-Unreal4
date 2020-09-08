@@ -51,6 +51,6 @@ public:
 	virtual void Jump() { Super::Jump(); };
 	virtual void SetDamage(float damage);
 	virtual void SetHitTime(float hitTime);
-	virtual void SetNuckback(float force);
+	virtual void SetNuckback(FVector direction, float force);
 	virtual void Death();
 };
