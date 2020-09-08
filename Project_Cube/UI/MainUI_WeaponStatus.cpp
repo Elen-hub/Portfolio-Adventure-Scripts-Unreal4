@@ -14,6 +14,17 @@ void UMainUI_WeaponStatus::NativeConstruct()
 	mNameText = WidgetTree->FindWidget<UTextBlock>(TEXT("Name"));
 	mCurrMagazine = WidgetTree->FindWidget<UTextBlock>(TEXT("CurrMagazine"));
 	mMaxMagazine = WidgetTree->FindWidget<UTextBlock>(TEXT("MaxMagazine"));
+	mWeaponStatus = WidgetTree->FindWidget<UTextBlock>(TEXT("Status"));
+
+	UWidgetBlueprintGeneratedClass* widgetAni = Cast<UWidgetBlueprintGeneratedClass>(GetClass());
+	for (UWidgetAnimation* animation : widgetAni->Animations)
+	{
+		if (TEXT("FlickerText_INST") == animation->GetName())
+		{
+			PlayAnimation(animation, 0.f, 0);
+			return;
+		}
+	}
 }
 
 void UMainUI_WeaponStatus::Tick(float deltaTime)
@@ -48,6 +59,20 @@ void UMainUI_WeaponStatus::Tick(float deltaTime)
 	else
 	{
 		mCurrMagazine->SetColorAndOpacity(mEmptyMagazineColor);
+	}
+	if (mBaseHero->IsReloading())
+	{
+		mWeaponStatus->SetText(FText::FromString("Reload"));
+		mWeaponStatus->SetVisibility(ESlateVisibility::Visible);
+	}
+	else if (mBaseHero->GetWeapon()->CurrMagazine == 0) 
+	{
+		mWeaponStatus->SetText(FText::FromString("Empty"));
+		mWeaponStatus->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		mWeaponStatus->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

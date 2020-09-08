@@ -57,7 +57,6 @@ void ABullet::Enabled(FVector spawnPos, FVector direction, float speed, float da
 
 void ABullet::Disabled()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Disabled"));
 	mMovementComponent->Velocity = FVector::ZeroVector;
 	mMovementComponent->Deactivate();
 	SetActorHiddenInGame(true);

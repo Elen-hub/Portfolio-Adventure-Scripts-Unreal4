@@ -28,6 +28,8 @@ private:
 	class UTextBlock* mCurrMagazine;
 	UPROPERTY()
 	class UTextBlock* mMaxMagazine;
+	UPROPERTY()
+	class UTextBlock* mWeaponStatus;
 protected:
 	virtual void NativeConstruct() override;
 

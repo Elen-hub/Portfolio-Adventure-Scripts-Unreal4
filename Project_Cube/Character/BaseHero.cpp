@@ -92,6 +92,18 @@ void ABaseHero::Tick(float DeltaTime)
 			// 자연반동감소
 			mCurrRecoil = FMath::Clamp(mCurrRecoil - DeltaTime * 100, 0.f, mWeapon->MaxRecoil);
 		}
+		if (mbIsReloading)
+		{
+			mReloadTargetTime -= DeltaTime;
+			if (mReloadTargetTime <= 0)
+			{
+				mbIsReloading = false;
+				mReloadTargetTime = 0;
+				// 총알을 가져옴
+				// 임시
+				mWeapon->CurrMagazine = mWeapon->MaxMagazine;
+			}
+		}
 	}
 }
 
@@ -119,6 +131,13 @@ void ABaseHero::GetItem()
 	if (item == nullptr)
 		return;
 
+	// 리로드 캔슬
+	if (mbIsReloading)
+	{
+		mReloadTargetTime = 0;
+		mbIsReloading = false;
+	}
+
 	switch (item->GetItemType())
 	{
 	case EItemType::EIT_AssaultRifle:
@@ -139,9 +158,7 @@ void ABaseHero::SetWeapon(ABaseWeapon* weapon)
 	const USkeletalMeshSocket* RightHandSocket = GetMesh()->GetSocketByName("RightHandSocket");
 	if (mWeapon != nullptr)
 	{
-		// Drop weapon
 		mWeapon->ActivateCollision(true);
-		// 소켓을 해제하는 구문을 추가해야함.
 	}
 
 	// 무기관리상태 초기화
@@ -156,6 +173,16 @@ void ABaseHero::SetWeapon(ABaseWeapon* weapon)
 
 void ABaseHero::AttackStart()
 {
+	if (!mWeapon)
+		return;
+
+	if (mWeapon->CurrMagazine <= 0)
+	{
+		// 총알이 없을경우
+		Reload();
+		return;
+	}
+
 	mbIsFire = true;
 }
 
@@ -171,13 +198,18 @@ void ABaseHero::Fire()
 		mbIsFire = false;
 		return;
 	}
+	if (mbIsReloading)
+	{
+		// 재장전 중일경우
+		mbIsFire = false;
+		return;
+	}
 	if (mWeapon->CurrMagazine <= 0)
 	{
 		// 총알이 없을경우
 		mbIsFire = false;
 		return;
 	}
-
 	// 총알발사
 	ABullet* bullet = GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnActor<ABullet>(mBulletRefClass);
 	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot(), 0, 0, 0);
@@ -196,7 +228,16 @@ void ABaseHero::Fire()
 }
 void ABaseHero::Reload()
 {
+	if (!mWeapon)
+		return;
+	if (mWeapon->MaxMagazine == mWeapon->CurrMagazine)
+		return;
+	// 인벤토리에 총알이 없어도 리턴
+	if (mbIsReloading)
+		return;
 
+	mbIsReloading = true;
+	mReloadTargetTime = mWeapon->ReloadSpeed;
 }
 void ABaseHero::Interaction()
 {

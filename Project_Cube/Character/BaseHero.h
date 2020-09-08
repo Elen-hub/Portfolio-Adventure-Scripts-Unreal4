@@ -36,7 +36,7 @@ protected:
 	float mElapsedRecoil;
 
 	bool mbIsReloading;
-	float mElapsedReloadTime;
+	float mReloadTargetTime;
 protected:
 	virtual void BeginPlay() override;
 
@@ -57,4 +57,5 @@ public:
 	FORCEINLINE ABaseWeapon* GetWeapon() { return mWeapon; }
 	void SetWeapon(ABaseWeapon* weapon);
 	FORCEINLINE float GetCurrRecoil() { return mCurrRecoil; }
+	FORCEINLINE bool IsReloading() { return mbIsReloading; }
 };
