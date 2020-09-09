@@ -276,10 +276,10 @@ void ABaseHero::MoveForward(float axis)
 	{
 		if (mbIsFire)
 		{
-			TSpeed = 400.f;
+			TSpeed = 200.f;
 		}
 		else if (mSprintFunction->GetUseSprint())
-			TSpeed = 800.f;
+			TSpeed = 600.f;
 	}
 
 	TInputVector.X = axis * TSpeed;
