@@ -20,7 +20,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
-	class ABaseCharacter* BaseCharacter;
+	class ABaseCharacter* mBaseCharacter;
 
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	float mForwardAxis;

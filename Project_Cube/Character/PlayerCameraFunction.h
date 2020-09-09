@@ -27,9 +27,9 @@ public:
 	FORCEINLINE FVector GetMuzzleRot();
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerCamera")
+	UPROPERTY(EditAnywhere, Category = "PlayerCamera")
 	UCameraComponent* mCamera;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
+	UPROPERTY(EditAnywhere, Category = "SpringArm")
 	USpringArmComponent* mCameraSpringArm;
 	UPROPERTY()
 	UMainGameInstance* mMainGameInstance;

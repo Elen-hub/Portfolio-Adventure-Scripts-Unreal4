@@ -65,6 +65,9 @@ void ABaseHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// 리로드, 사격중엔 스프린트 사용제약
+	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
+
 	if (mWeapon)
 	{
 		// 연사딜레이감소
@@ -183,6 +186,9 @@ void ABaseHero::AttackStart()
 		Reload();
 		return;
 	}
+	// 스프린트 해제
+	if (mSprintFunction->GetUseSprint())
+		mSprintFunction->Deactivate();
 
 	mbIsFire = true;
 }
@@ -226,6 +232,10 @@ void ABaseHero::Fire()
 	mCurrRecoil = FMath::Clamp(mCurrRecoil + mWeapon->Recoil, 0.f, mWeapon->MaxRecoil);
 	mTargetVerticalRecoil = -FMath::RandRange(mCurrRecoil * 0.5f, mCurrRecoil);
 	mTargetHorizonRecoil = FMath::RandRange(-mCurrRecoil, mCurrRecoil) * 0.5f;
+
+	// 애니메이션 몽타주 설정
+	mAnimInstance->Montage_Play(mCombatMontage, 3.0f);
+	mAnimInstance->Montage_JumpToSection(FName("Fire"), mCombatMontage);
 }
 void ABaseHero::Reload()
 {
@@ -237,8 +247,16 @@ void ABaseHero::Reload()
 	if (mbIsReloading)
 		return;
 
+	// 스프린트 해제
+	if (mSprintFunction->GetUseSprint())
+		mSprintFunction->Deactivate();
+
 	mbIsReloading = true;
 	mReloadTargetTime = mWeapon->ReloadSpeed;
+
+	// 애니메이션 몽타주 설정
+	mAnimInstance->Montage_Play(mCombatMontage, 1.0f);
+	mAnimInstance->Montage_JumpToSection(FName("Reload"), mCombatMontage);
 }
 void ABaseHero::Interaction()
 {
@@ -254,8 +272,15 @@ void ABaseHero::MoveForward(float axis)
 
 	if (axis < 0)
 		axis *= 0.4f;
-	else if (mSprintFunction->GetUseSprint())
-		TSpeed = 800.f;
+	else
+	{
+		if (mbIsFire)
+		{
+			TSpeed = 400.f;
+		}
+		else if (mSprintFunction->GetUseSprint())
+			TSpeed = 800.f;
+	}
 
 	TInputVector.X = axis * TSpeed;
 	SetActorRotation(yawRotation);

@@ -19,14 +19,15 @@ public:
 private:
 	ESprintState mSprintState;
 	bool mbUseSprint;
+	bool mbPossibleSprint;
 	float* mRecoveryStamina;
 	float* mMaxStamina;
 	float mCurrStamina;
 	const float mExhaustedStamina = 0.25f;
-
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	USprintFunction* Init();
 	void SprintActivate();
 	void SprintDeactivate();
+	FORCEINLINE void SetPossibleSprint(bool isPossible) { mbPossibleSprint = isPossible; }
 };

@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Project_Cube/Character/BaseHero.h"
 #include "TimerManager.h"
+#include "Sound/SoundCue.h"
 
 ATrapObject_Explosion::ATrapObject_Explosion()
 {
@@ -67,6 +68,7 @@ void ATrapObject_Explosion::Explosion()
 	if (mOverlapParticle)
 		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
 
+	GetGameInstance<UMainGameInstance>()->SoundMng->PlayEffectSound(this, mOverlapSound);
 	// 리스폰기능 사용.
 	if (mbUseRespawn)
 	{

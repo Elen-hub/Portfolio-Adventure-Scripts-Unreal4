@@ -16,9 +16,6 @@ ABaseCharacter::ABaseCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 
-	mMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	mMesh->SetupAttachment(GetRootComponent());
-
 	// 오버랩콜리전 기본설정 ( 충돌이벤트 사용안함, 충돌관계 모두 무시 )
 	mOverlapCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Overlap Collision"));
 	mOverlapCollision->SetupAttachment(GetRootComponent());
@@ -41,6 +38,7 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	mAnimInstance = GetMesh()->GetAnimInstance();
 	TestInitPos = GetActorLocation();
 }
 void ABaseCharacter::SetCharacterState(const ECharacterState nextState)
@@ -80,14 +78,12 @@ void ABaseCharacter::SetHitTime(float hitTime)
 
 void ABaseCharacter::SetNuckback(FVector direction, float force)
 {
-	// mMesh->AddForce(direction * force);
-	UE_LOG(LogTemp, Warning, TEXT("%f"), force);
 	GetCharacterMovement()->AddImpulse(direction * force* 1000.f);
 }
 
 void ABaseCharacter::Death()
 {
 	mTarget = nullptr;
-	mMesh->SetGenerateOverlapEvents(false);
+	GetMesh()->SetGenerateOverlapEvents(false);
 	mOverlapCollision->SetGenerateOverlapEvents(false);
 }

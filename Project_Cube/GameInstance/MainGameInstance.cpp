@@ -5,6 +5,7 @@
 #include "CharacterMng.h"
 #include "UIMng.h"
 #include "SpawnMng.h"
+#include "SoundMng.h"
 
 
 void UMainGameInstance::Init()
@@ -14,4 +15,5 @@ void UMainGameInstance::Init()
 	CharacterMng = NewObject<UCharacterMng>()->Init();
 	UIMng = NewObject<UUIMng>()->Init(this);
 	SpawnMng = NewObject<USpawnMng>()->Init(this);
+	SoundMng = NewObject<USoundMng>()->Init();
 }

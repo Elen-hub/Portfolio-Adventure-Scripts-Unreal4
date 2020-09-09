@@ -6,6 +6,7 @@
 #include "Project_Cube/GameInstance/UIMng.h"
 #include "Project_Cube/GameInstance/CharacterMng.h"
 #include "Project_Cube/GameInstance/SpawnMng.h"
+#include "Project_Cube/GameInstance/SoundMng.h"
 #include "CoreMinimal.h"
 #include "User.generated.h"
 

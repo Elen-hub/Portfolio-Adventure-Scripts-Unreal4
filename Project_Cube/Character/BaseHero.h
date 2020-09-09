@@ -22,11 +22,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "PlayerCamera")
 	class UPlayerCameraFunction* mPlayerCamera;
 	// Weapon Option
-	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	class ABaseWeapon* mWeapon;
 
 	UClass* mBulletRefClass;
 
+	UPROPERTY(BlueprintReadOnly)
 	bool mbIsFire;
 	float mAutoFireDelay;
 
@@ -35,6 +36,7 @@ protected:
 	float mCurrRecoil;
 	float mElapsedRecoil;
 
+	UPROPERTY(BlueprintReadOnly)
 	bool mbIsReloading;
 	float mReloadTargetTime;
 protected:
@@ -58,4 +60,5 @@ public:
 	void SetWeapon(ABaseWeapon* weapon);
 	FORCEINLINE float GetCurrRecoil() { return mCurrRecoil; }
 	FORCEINLINE bool IsReloading() { return mbIsReloading; }
+	FORCEINLINE bool IsFire() { return mbIsFire; }
 };

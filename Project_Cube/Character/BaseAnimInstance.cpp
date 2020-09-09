@@ -4,20 +4,25 @@
 #include "BaseAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BaseCharacter.h"
+#include "BaseHero.h"
 
 void UBaseAnimInstance::NativeInitializeAnimation()
 {
-	BaseCharacter = Cast<ABaseCharacter>(TryGetPawnOwner());
+	Super::NativeInitializeAnimation();
+
+	mBaseCharacter = Cast<ABaseCharacter>(TryGetPawnOwner());
 }
 
 void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-	if (!BaseCharacter)
+	Super::NativeUpdateAnimation(DeltaSeconds);
+
+	if (!mBaseCharacter)
 		return;
 
-	FVector velocity = BaseCharacter->TInputVector;
+	FVector velocity = mBaseCharacter->TInputVector;
 	mForwardAxis = velocity.X;
 	mSideAxis = velocity.Y;
 
-	mbIsInair = BaseCharacter->GetMovementComponent()->IsFalling();
+	mbIsInair = mBaseCharacter->GetMovementComponent()->IsFalling();
 }

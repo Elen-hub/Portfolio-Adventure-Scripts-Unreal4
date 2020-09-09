@@ -14,15 +14,17 @@ class PROJECT_CUBE_API ABaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
-	USkeletalMeshComponent* mMesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Overlap Collision")
+	UPROPERTY(VisibleAnywhere, Category = "Overlap Collision")
 	class USphereComponent* mOverlapCollision;
 	class UAnimMontage* mAnimationMontage;
 	UPROPERTY(VisibleAnywhere, Category = "State")
 	ECharacterState mCharacterState;
 	class UStatFunction* mStatFunction;
 	ABaseCharacter* mTarget;
+
+	class UAnimInstance* mAnimInstance;
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	class UAnimMontage* mCombatMontage;
 
 	// Hit option
 	float mHitTargetTime;

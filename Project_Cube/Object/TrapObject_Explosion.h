@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Trap | Respawn")
 	float mRespawnTime;
 
+	UPROPERTY(EditAnywhere, Category = "Trap | Sound")
+	class USoundCue* mOverlapSound;
+
 	FTimerHandle mDelayTimer;
 	FTimerHandle mRespawnTimer;
 protected:

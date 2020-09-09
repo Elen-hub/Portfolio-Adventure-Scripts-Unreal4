@@ -15,7 +15,7 @@ class PROJECT_CUBE_API UMainGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY()
 	class ABaseHero* MainCharacter;
 	UPROPERTY()
 	class UCharacterMng* CharacterMng;
@@ -23,6 +23,8 @@ public:
 	class UUIMng* UIMng;
 	UPROPERTY()
 	class USpawnMng* SpawnMng;
+	UPROPERTY()
+	class USoundMng* SoundMng;
 
 	virtual void Init() override;
 };
