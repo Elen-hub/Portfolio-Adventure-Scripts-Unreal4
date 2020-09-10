@@ -331,7 +331,8 @@ void ABaseHero::DropWeapon()
 		mCurrRecoil = 0;
 
 		const USkeletalMeshSocket* RightHandSocket = GetMesh()->GetSocketByName("RightHandSocket");
-		RightHandSocket->AttachActor(nullptr, GetMesh());
+	
+		mWeapon->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 		mWeapon = nullptr;
 	}
 }
