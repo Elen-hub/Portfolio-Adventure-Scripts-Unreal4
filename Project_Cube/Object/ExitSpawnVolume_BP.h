@@ -14,4 +14,10 @@ class PROJECT_CUBE_API AExitSpawnVolume_BP : public ABaseObject
 {
 	GENERATED_BODY()
 	
+public:
+	AExitSpawnVolume_BP();
+protected:
+	virtual void OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
+private:
+	void Spawn();
 };

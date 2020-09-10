@@ -21,6 +21,17 @@ namespace System
 }
 
 UENUM()
+enum class EFlickerType : uint8
+{
+	EFT_None		UMETA(DeplayName = "None"),
+	EFT_Default		UMETA(DeplayName = "Default"),
+	EFT_Sin			UMETA(DeplayName = "Sin"),
+	EFT_Random	UMETA(DeplayName = "Random"),
+
+	EFT_Max		UMETA(DeplayName = "DefaultMax"),
+};
+
+UENUM()
 enum class EItemType : uint8
 {
 	EIT_Potion			UMETA(DeplayName = "Potion"),

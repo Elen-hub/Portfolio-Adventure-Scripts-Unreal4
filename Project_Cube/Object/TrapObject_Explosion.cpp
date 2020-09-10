@@ -7,16 +7,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "Project_Cube/Character/BaseHero.h"
 #include "TimerManager.h"
-#include "Sound/SoundCue.h"
 
 ATrapObject_Explosion::ATrapObject_Explosion()
 {
-	mOverlapRadius = 75.f;
-
 	USphereComponent* sphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Event Collision"));
+	sphereCollision->InitSphereRadius(mOverlapRadius);
 	mCollision = sphereCollision;
 	mCollision->SetupAttachment(GetRootComponent());
-	sphereCollision->InitSphereRadius(mOverlapRadius);
 
 	mParticleIdle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Idle Particle"));
 	mParticleIdle->SetupAttachment(GetRootComponent());
@@ -61,7 +58,9 @@ void ATrapObject_Explosion::Explosion()
 	if (mOverlapParticle)
 		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
 
-	GetGameInstance<UMainGameInstance>()->SoundMng->PlayEffectSound(this, mOverlapSound);
+	if(mOverlapSound)
+		GetGameInstance<UMainGameInstance>()->SoundMng->PlayEffectSound(this, mOverlapSound);
+
 	// 리스폰기능 사용.
 	if (mbUseRespawn)
 	{

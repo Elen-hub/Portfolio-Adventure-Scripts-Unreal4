@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Project_Cube/User.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseObject.generated.h"
@@ -15,19 +16,19 @@ public:
 	// Sets default values for this actor's properties
 	ABaseObject();
 protected:
-	UPROPERTY(EditAnywhere, Category = "Event | Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Mesh")
 	class UStaticMeshComponent* mMesh;
 
-	UPROPERTY(EditAnywhere, Category = "Event | Collision")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Collision")
 	class UPrimitiveComponent* mCollision;
 
-	UPROPERTY(EditAnywhere, Category = "Event | Sound")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Sound")
 	class USoundCue* mOverlapSound;
 
-	UPROPERTY(EditAnywhere, Category = "Event | Delay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Delay")
 	bool mbUseDelay;
 
-	UPROPERTY(EditAnywhere, Category = "Event | Delay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Delay")
 	float mDelayTime;
 
 	FTimerHandle mDelayTimer;
