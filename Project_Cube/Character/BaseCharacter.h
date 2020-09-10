@@ -31,6 +31,8 @@ protected:
 	float mHitElapsedTime;
 	UPROPERTY(BlueprintReadWrite, Category = "Status")
 	bool mbIsHit;
+
+	bool mbIsWalk;
 public:
 	ABaseCharacter();
 
@@ -39,12 +41,16 @@ public:
 	FVector TestInitPos;
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void WalkStart();
+	virtual void WalkEnd();
 public:
 	FORCEINLINE ECharacterState GetCharacterState() { return mCharacterState; }
 	FORCEINLINE ABaseCharacter* GetTarget() { return mTarget; }
 	FORCEINLINE USphereComponent* GetOverlapCollision() { return mOverlapCollision; }
 	FORCEINLINE UStatFunction* StatFunction() { return mStatFunction; }
 	FORCEINLINE void SetTarget(ABaseCharacter* character) { mTarget = character; }
+	FORCEINLINE bool IsWalk() { return mbIsWalk; }
 	virtual void SetCharacterState(const ECharacterState nextState);
 
 	virtual void Tick(float DeltaTime) override;

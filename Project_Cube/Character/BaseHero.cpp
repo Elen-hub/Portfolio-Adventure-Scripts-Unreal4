@@ -65,6 +65,39 @@ void ABaseHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (TInputVector.X > 0)
+	{
+		// 정면이동
+		if (mbIsFire)
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 0.5f;
+		else if (mSprintFunction->GetUseSprint())
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 1.5f;
+		else
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 1.f;
+	}
+	else if(TInputVector.X < 0)
+	{
+		// 후방이동
+		if (mbIsFire)
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 0.4f;
+		else
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 0.5f;
+	}
+	else
+	{
+		// 측면이동
+		if (mbIsFire)
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 0.5f;
+		else if(mSprintFunction->GetUseSprint())
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 1;
+		else
+			GetCharacterMovement()->MaxWalkSpeed = TSpeed * 0.6f;
+	}
+	if (mbIsWalk)
+	{
+		mSprintFunction->SprintDeactivate();
+		GetCharacterMovement()->MaxWalkSpeed *= 0.5f;
+	}
 	// 리로드, 사격중엔 스프린트 사용제약
 	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
 
@@ -114,6 +147,9 @@ void ABaseHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Pressed, this, &ABaseHero::WalkStart);
+	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ABaseHero::WalkEnd);
+	PlayerInputComponent->BindAction("Drop", EInputEvent::IE_Pressed, this, &ABaseHero::DropWeapon);
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ABaseHero::AttackStart);
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ABaseHero::AttackEnd);
 	PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ABaseHero::Reload);
@@ -188,7 +224,7 @@ void ABaseHero::AttackStart()
 	}
 	// 스프린트 해제
 	if (mSprintFunction->GetUseSprint())
-		mSprintFunction->Deactivate();
+		mSprintFunction->SprintDeactivate();
 
 	mbIsFire = true;
 }
@@ -217,6 +253,7 @@ void ABaseHero::Fire()
 		mbIsFire = false;
 		return;
 	}
+
 	// 총알발사
 	ABullet* bullet = GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnActor<ABullet>(mBulletRefClass);
 	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot(), 0, 10, 0.1f);
@@ -249,7 +286,7 @@ void ABaseHero::Reload()
 
 	// 스프린트 해제
 	if (mSprintFunction->GetUseSprint())
-		mSprintFunction->Deactivate();
+		mSprintFunction->SprintDeactivate();
 
 	mbIsReloading = true;
 	mReloadTargetTime = mWeapon->ReloadSpeed;
@@ -264,25 +301,11 @@ void ABaseHero::Interaction()
 }
 void ABaseHero::MoveForward(float axis)
 {
-	TSpeed = 400.f;
-
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0.f, rotation.Yaw, 0.f);
 	const FVector Direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::X);
 
-	if (axis < 0)
-		axis *= 0.4f;
-	else
-	{
-		if (mbIsFire)
-		{
-			TSpeed = 200.f;
-		}
-		else if (mSprintFunction->GetUseSprint())
-			TSpeed = 600.f;
-	}
-
-	TInputVector.X = axis * TSpeed;
+	TInputVector.X = axis;
 	SetActorRotation(yawRotation);
 	AddMovementInput(Direction, axis);
 }
@@ -292,12 +315,23 @@ void ABaseHero::MoveSide(float axis)
 	const FRotator yawRotation(0.f, rotation.Yaw, 0.f);
 	const FVector Direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 
-	axis *= 0.6f;
-
-	TInputVector.Y = axis * TSpeed;
+	TInputVector.Y = axis;
 	AddMovementInput(Direction, axis);
 }
 void ABaseHero::Jump()
 {
 	Super::Jump();
+}
+void ABaseHero::DropWeapon()
+{
+	if (mWeapon != nullptr)
+	{
+		mWeapon->ActivateCollision(true);
+		mAutoFireDelay = 0;
+		mCurrRecoil = 0;
+
+		const USkeletalMeshSocket* RightHandSocket = GetMesh()->GetSocketByName("RightHandSocket");
+		RightHandSocket->AttachActor(nullptr, GetMesh());
+		mWeapon = nullptr;
+	}
 }

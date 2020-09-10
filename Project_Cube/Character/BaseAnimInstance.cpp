@@ -20,9 +20,8 @@ void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (!mBaseCharacter)
 		return;
 
-	FVector velocity = mBaseCharacter->TInputVector;
+	FVector const velocity = mBaseCharacter->TInputVector * mBaseCharacter->GetVelocity().Size();
 	mForwardAxis = velocity.X;
 	mSideAxis = velocity.Y;
-
 	mbIsInair = mBaseCharacter->GetMovementComponent()->IsFalling();
 }

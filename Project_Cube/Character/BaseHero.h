@@ -50,7 +50,7 @@ protected:
 	virtual void MoveForward(float axis) override;
 	virtual void MoveSide(float axis) override;
 	virtual void Jump() override;
-
+	virtual void DropWeapon();
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

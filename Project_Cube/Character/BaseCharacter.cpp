@@ -31,6 +31,8 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->JumpZVelocity = 500.f;
 	// 공중컨트롤
 	GetCharacterMovement()->AirControl = 0.2f;
+	GetCharacterMovement()->MaxAcceleration = 500.f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 50.f;
 
 	TInputVector = FVector(0.f);
 }
@@ -86,4 +88,12 @@ void ABaseCharacter::Death()
 	mTarget = nullptr;
 	GetMesh()->SetGenerateOverlapEvents(false);
 	mOverlapCollision->SetGenerateOverlapEvents(false);
+}
+void ABaseCharacter::WalkStart()
+{
+	mbIsWalk = true;
+}
+void ABaseCharacter::WalkEnd()
+{
+	mbIsWalk = false;
 }
