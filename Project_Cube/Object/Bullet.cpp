@@ -45,6 +45,7 @@ void ABullet::Tick(float deltaTime)
 	mDistanceAmount += mMovementComponent->InitialSpeed * deltaTime;
 	if (mDistanceAmount > 40000.f)
 		Disabled();
+
 }
 
 void ABullet::Enabled(FVector spawnPos, FVector direction, float speed, float damage, float hitTime)

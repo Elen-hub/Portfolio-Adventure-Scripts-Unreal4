@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+DECLARE_DELEGATE(TimerDelegate);
 
 #include "BaseObject.h"
+#include "TimerManager.h"
 #include "Components/StaticMeshComponent.h"
 
 // Sets default values
@@ -24,6 +26,14 @@ void ABaseObject::BeginPlay()
 		mCollision->OnComponentBeginOverlap.AddDynamic(this, &ABaseObject::OnCollisionEnter);
 		mCollision->OnComponentEndOverlap.AddDynamic(this, &ABaseObject::OnCollisionExit);
 	}
+}
+template< class T >
+void ABaseObject::SetDelayTimer(T* inObj, void (T::* inMethod)())
+{
+	if (mbUseDelay)
+		GetWorldTimerManager().SetTimer(mDelayTimer, inObj, inMethod, mDelayTime);
+	else
+		(inObj->*inMethod)();
 }
 
 // Called every frame

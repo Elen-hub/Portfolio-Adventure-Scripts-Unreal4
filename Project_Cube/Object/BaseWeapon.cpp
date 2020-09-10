@@ -6,7 +6,14 @@
 
 ABaseWeapon::ABaseWeapon()
 {
-
+	MaxMagazine = 30.f;
+	CurrMagazine = MaxMagazine;
+	Damage = 10.f;
+	FullAutoSpeed = 0.1f;
+	ReloadSpeed = 3.f;
+	Recoil = 10.f;
+	MaxRecoil = 50.f;
+	BulletSpread = 1.f;
 }
 ABaseWeapon* ABaseWeapon::Init()
 {

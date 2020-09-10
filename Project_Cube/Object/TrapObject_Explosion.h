@@ -36,22 +36,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
 	float mNuckbackForce;
 
-	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
-	bool mbUseDelay;
-
-	UPROPERTY(EditAnywhere, Category = "Trap | Damage")
-	float mDelayTime;
-
 	UPROPERTY(EditAnywhere, Category = "Trap | Respawn")
 	bool mbUseRespawn;
 
 	UPROPERTY(EditAnywhere, Category = "Trap | Respawn")
 	float mRespawnTime;
 
-	UPROPERTY(EditAnywhere, Category = "Trap | Sound")
-	class USoundCue* mOverlapSound;
-
-	FTimerHandle mDelayTimer;
 	FTimerHandle mRespawnTimer;
 protected:
 	virtual void BeginPlay() override;

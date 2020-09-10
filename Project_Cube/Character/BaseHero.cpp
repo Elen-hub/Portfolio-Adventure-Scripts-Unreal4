@@ -65,6 +65,8 @@ void ABaseHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
+
 	if (TInputVector.X > 0)
 	{
 		// 정면이동
@@ -98,9 +100,31 @@ void ABaseHero::Tick(float DeltaTime)
 		mSprintFunction->SprintDeactivate();
 		GetCharacterMovement()->MaxWalkSpeed *= 0.5f;
 	}
-	// 리로드, 사격중엔 스프린트 사용제약
-	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
-
+	if (mbIsReloading)
+	{
+		// 재장전 중일경우
+		mbIsFire = false;
+		if (mWeapon)
+		{
+			// 무기가 잇을경우 작동
+			mReloadTargetTime -= DeltaTime;
+			if (mReloadTargetTime <= 0)
+			{
+				mbIsReloading = false;
+				mReloadTargetTime = 0;
+				// 총알을 가져옴
+				// 임시
+				mWeapon->CurrMagazine = mWeapon->MaxMagazine;
+			}
+		}
+		else
+		{
+			// 무기가 없을경우 캔슬
+			mbIsReloading = false;
+			mReloadTargetTime = 0;
+			mAnimInstance->Montage_Stop(0.1f);
+		}
+	}
 	if (mWeapon)
 	{
 		// 연사딜레이감소
@@ -127,18 +151,6 @@ void ABaseHero::Tick(float DeltaTime)
 		{
 			// 자연반동감소
 			mCurrRecoil = FMath::Clamp(mCurrRecoil - DeltaTime * 100, 0.f, mWeapon->MaxRecoil);
-		}
-		if (mbIsReloading)
-		{
-			mReloadTargetTime -= DeltaTime;
-			if (mReloadTargetTime <= 0)
-			{
-				mbIsReloading = false;
-				mReloadTargetTime = 0;
-				// 총알을 가져옴
-				// 임시
-				mWeapon->CurrMagazine = mWeapon->MaxMagazine;
-			}
 		}
 	}
 }
@@ -241,22 +253,24 @@ void ABaseHero::Fire()
 		mbIsFire = false;
 		return;
 	}
-	if (mbIsReloading)
-	{
-		// 재장전 중일경우
-		mbIsFire = false;
-		return;
-	}
 	if (mWeapon->CurrMagazine <= 0)
 	{
 		// 총알이 없을경우
 		mbIsFire = false;
 		return;
 	}
-
 	// 총알발사
 	ABullet* bullet = GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnActor<ABullet>(mBulletRefClass);
-	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot(), 0, 10, 0.1f);
+
+	FVector velocity = GetVelocity();
+	if(GetMovementComponent()->IsFalling())
+		velocity *= 0.0003f;
+	else
+		velocity *= 0.00015f;
+	float size = velocity.Size();
+	velocity.X = FMath::RandRange(-size, size);
+	velocity.Z = FMath::RandRange(-size, size);
+	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot() + velocity, 0, 10, 0.1f);
 	mWeapon->CurrMagazine -= 1;
 
 	// 딜레이적용
@@ -268,7 +282,7 @@ void ABaseHero::Fire()
 	// 반동반영
 	mCurrRecoil = FMath::Clamp(mCurrRecoil + mWeapon->Recoil, 0.f, mWeapon->MaxRecoil);
 	mTargetVerticalRecoil = -FMath::RandRange(mCurrRecoil * 0.5f, mCurrRecoil);
-	mTargetHorizonRecoil = FMath::RandRange(-mCurrRecoil, mCurrRecoil) * 0.5f;
+	mTargetHorizonRecoil = FMath::RandRange(-mCurrRecoil, mCurrRecoil) * 0.25f;
 
 	// 애니메이션 몽타주 설정
 	mAnimInstance->Montage_Play(mCombatMontage, 3.0f);

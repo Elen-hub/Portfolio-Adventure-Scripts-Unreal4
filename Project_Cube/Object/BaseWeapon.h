@@ -36,6 +36,8 @@ public:
 	float Recoil;
 	UPROPERTY(EditAnywhere, Category = "Item | Stat")
 	float MaxRecoil;
+	UPROPERTY(EditAnywhere, Category = "Item | Stat")
+	float BulletSpread;
 
 	void ActivateCollision(bool isActivate);
 	void Equip();

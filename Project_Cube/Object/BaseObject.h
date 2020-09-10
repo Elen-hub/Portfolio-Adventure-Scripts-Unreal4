@@ -15,13 +15,26 @@ public:
 	// Sets default values for this actor's properties
 	ABaseObject();
 protected:
-	UPROPERTY(EditAnywhere, Category = "Static Mesh")
+	UPROPERTY(EditAnywhere, Category = "Event | Mesh")
 	class UStaticMeshComponent* mMesh;
-	UPROPERTY(EditAnywhere, Category = "Event Collision")
+
+	UPROPERTY(EditAnywhere, Category = "Event | Collision")
 	class UPrimitiveComponent* mCollision;
+
+	UPROPERTY(EditAnywhere, Category = "Event | Sound")
+	class USoundCue* mOverlapSound;
+
+	UPROPERTY(EditAnywhere, Category = "Event | Delay")
+	bool mbUseDelay;
+
+	UPROPERTY(EditAnywhere, Category = "Event | Delay")
+	float mDelayTime;
+
+	FTimerHandle mDelayTimer;
 protected:
 	virtual void BeginPlay() override;
-
+	template< class T >
+	void SetDelayTimer(T* inObj, void (T::* inMethod)());
 	UFUNCTION()
 	virtual void OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {};
 	UFUNCTION()

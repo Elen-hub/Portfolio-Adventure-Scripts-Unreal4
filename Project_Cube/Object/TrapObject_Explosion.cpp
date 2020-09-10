@@ -53,14 +53,7 @@ void ATrapObject_Explosion::OnCollisionEnter(UPrimitiveComponent* OverlappedComp
 	// 리스폰 전까진 이벤트를 받지않음
 	mCollision->SetGenerateOverlapEvents(false);
 
-	if (mbUseDelay)
-	{
-		GetWorldTimerManager().SetTimer(mDelayTimer, this, &ATrapObject_Explosion::Explosion, mDelayTime);
-	}
-	else
-	{
-		Explosion();
-	}
+	SetDelayTimer(this, &ATrapObject_Explosion::Explosion);
 }
 
 void ATrapObject_Explosion::Explosion()
