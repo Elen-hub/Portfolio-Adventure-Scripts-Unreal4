@@ -27,6 +27,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Trap | Particle")
 	float mOverlapParticleSize;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trap | Sound")
+	USoundWave* mExploisionSound;
+
 	UPROPERTY(EditAnywhere, Category = "Trap | Range")
 	float mOverlapRadius;
 

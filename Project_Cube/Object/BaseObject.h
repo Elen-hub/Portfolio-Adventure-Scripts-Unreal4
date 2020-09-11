@@ -23,7 +23,7 @@ protected:
 	class UPrimitiveComponent* mCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Sound")
-	class USoundCue* mOverlapSound;
+	class UAudioComponent* mAudioComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Delay")
 	bool mbUseDelay;

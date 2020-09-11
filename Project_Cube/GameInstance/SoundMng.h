@@ -17,4 +17,5 @@ class PROJECT_CUBE_API USoundMng : public UObject
 public:
 	USoundMng* Init();
 	static void PlayEffectSound(const UObject* WorldContextObject, class USoundCue* sound);
+	static void StopEffectSound(USoundCue* sound);
 };

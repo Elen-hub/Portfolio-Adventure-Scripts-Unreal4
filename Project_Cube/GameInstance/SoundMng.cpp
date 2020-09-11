@@ -15,3 +15,8 @@ void USoundMng::PlayEffectSound(const UObject* WorldContextObject, USoundCue* so
 {
 	UGameplayStatics::PlaySound2D(WorldContextObject, sound);
 }
+
+void USoundMng::StopEffectSound(class USoundCue* sound)
+{
+	UGameplayStatics::PrimeSound(sound);
+}

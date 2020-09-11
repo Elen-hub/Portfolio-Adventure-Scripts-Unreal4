@@ -18,9 +18,6 @@ void AExitSpawnVolume_BP::OnCollisionExit(UPrimitiveComponent* OverlappedCompone
 	if (!character)
 		return;
 
-	if (mOverlapSound)
-		GetGameInstance<UMainGameInstance>()->SoundMng->PlayEffectSound(this, mOverlapSound);
-
 	mCollision->SetGenerateOverlapEvents(false);
 }
 

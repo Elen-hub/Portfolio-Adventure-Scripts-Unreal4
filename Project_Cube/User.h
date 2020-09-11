@@ -10,6 +10,7 @@
 #include "CoreMinimal.h"
 #include "User.generated.h"
 
+static UMainGameInstance* Main;
 namespace System
 {
 	const float AgroDefaultVolumeRange = 500.f;
@@ -25,7 +26,7 @@ enum class EFlickerType : uint8
 {
 	EFT_None		UMETA(DeplayName = "None"),
 	EFT_Default		UMETA(DeplayName = "Default"),
-	EFT_Sin			UMETA(DeplayName = "Sin"),
+	EFT_Constants			UMETA(DeplayName = "Constants"),
 	EFT_Random	UMETA(DeplayName = "Random"),
 
 	EFT_Max		UMETA(DeplayName = "DefaultMax"),

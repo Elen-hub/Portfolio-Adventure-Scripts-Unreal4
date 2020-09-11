@@ -5,6 +5,7 @@ DECLARE_DELEGATE(TimerDelegate);
 #include "BaseObject.h"
 #include "TimerManager.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 ABaseObject::ABaseObject()
@@ -13,6 +14,9 @@ ABaseObject::ABaseObject()
 	
 	mMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	SetRootComponent(mMesh);
+
+	mAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	mAudioComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned

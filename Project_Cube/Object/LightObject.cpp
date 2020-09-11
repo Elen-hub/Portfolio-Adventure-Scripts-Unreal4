@@ -5,6 +5,7 @@
 #include "Components/PointLightComponent.h"
 #include "Components/BoxComponent.h"
 #include "TimerManager.h"
+#include "Components/AudioComponent.h"
 
 ALightObject::ALightObject()
 {
@@ -20,19 +21,33 @@ void ALightObject::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (mLightBuzzSound)
+	{
+		mAudioComponent->SetSound(mLightBuzzSound);
+		mAudioComponent->Play();
+	}
+
+	if (mFlickerType == EFlickerType::EFT_Constants)
+	{
+		if (mConstantArray.Num() == 0)
+			mFlickerType = EFlickerType::EFT_None;
+		else
+			mCurrConstant = 0;
+	}
+
 	mFlickerCurrIntencity = mPointLight->Intensity;
-	if (!mIsFlickerOverlapOnly && mFlickerType != EFlickerType::EFT_None)
+	if (!mbIsFlickerOverlapOnly && mFlickerType != EFlickerType::EFT_None)
 	{
 		switch (mFlickerType)
 		{
 		case EFlickerType::EFT_Default:
-			ActivateFlickerConstantCycle();
+			ActivateFlickerConstantLerp();
 			break;
-		case EFlickerType::EFT_Sin:
-			ActivateFlickerSinCycle();
+		case EFlickerType::EFT_Constants:
+			ActivateFlickerConstants();
 			break;
 		case EFlickerType::EFT_Random:
-			ActivateFlickerRandomCycle();
+			ActivateFlickerRandomLerp();
 			break;
 		case EFlickerType::EFT_None:
 		default:
@@ -50,6 +65,8 @@ void ALightObject::Tick(float deltaTime)
 		mFlickerElapsedTime += deltaTime;
 		mPointLight->SetIntensity(FlickerBindAction.Execute());
 	}
+	if (mLightBuzzSound)
+		mAudioComponent->SetVolumeMultiplier(mPointLight->Intensity*0.001f);
 }
 
 void ALightObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -64,22 +81,27 @@ void ALightObject::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AA
 	if (!Cast<ABaseHero>(OtherActor))
 		return;
 
-	if (mFlickerType != EFlickerType::EFT_None && mIsFlickerOverlapOnly)
+	if (mbUseBrokenOverlap && mbBrokenOverlapEnter)
 	{
-		if (mIsOverlapEnter)
+		Broken();
+		return;
+	}
+	if (mFlickerType != EFlickerType::EFT_None && mbIsFlickerOverlapOnly)
+	{
+		if (mbFlickerOverlapEnter)
 		{
-			if (!mIsFlickerOverlapOnly)
+			if (!mbIsFlickerOverlapOnly)
 			{
 				switch (mFlickerType)
 				{
 				case EFlickerType::EFT_Default:
-					ActivateFlickerConstantCycle();
+					ActivateFlickerConstantLerp();
 					break;
-				case EFlickerType::EFT_Sin:
-					ActivateFlickerSinCycle();
+				case EFlickerType::EFT_Constants:
+					ActivateFlickerConstants();
 					break;
 				case EFlickerType::EFT_Random:
-					ActivateFlickerRandomCycle();
+					ActivateFlickerRandomLerp();
 					break;
 				case EFlickerType::EFT_None:
 				default:
@@ -94,21 +116,25 @@ void ALightObject::OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AAc
 {
 	if (!Cast<ABaseHero>(OtherActor))
 		return;
-
-	if (mFlickerType != EFlickerType::EFT_None && mIsFlickerOverlapOnly)
+	if (mbUseBrokenOverlap && !mbBrokenOverlapEnter)
 	{
-		if (!mIsOverlapEnter)
+		Broken();
+		return;
+	}
+	if (mFlickerType != EFlickerType::EFT_None && mbIsFlickerOverlapOnly)
+	{
+		if (!mbFlickerOverlapEnter)
 		{
 			switch (mFlickerType)
 			{
 			case EFlickerType::EFT_Default:
-				ActivateFlickerConstantCycle();
+				ActivateFlickerConstantLerp();
 				break;
-			case EFlickerType::EFT_Sin:
-				ActivateFlickerSinCycle();
+			case EFlickerType::EFT_Constants:
+				ActivateFlickerConstants();
 				break;
 			case EFlickerType::EFT_Random:
-				ActivateFlickerRandomCycle();
+				ActivateFlickerRandomLerp();
 				break;
 			case EFlickerType::EFT_None:
 			default:
@@ -118,30 +144,50 @@ void ALightObject::OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AAc
 	}
 }
 
-void ALightObject::ActivateFlickerConstantCycle()
+void ALightObject::ActivateFlickerConstantLerp()
 {
+	mbIsFlickerOverlapOnly = false;
+
 	if (FlickerBindAction.IsBound())
 		FlickerBindAction.Unbind();
 
 	mFlickerElapsedTime = 0;
 	mFlickerCurrIntencity = mPointLight->Intensity;
 
-	FlickerBindAction.BindUObject(this, &ALightObject::GetConstantCycleIntencity);
+	FlickerBindAction.BindUObject(this, &ALightObject::GetConstantIntencity);
 }
-
-void ALightObject::ActivateFlickerSinCycle()
+float ALightObject::GetConstantIntencity() 
 {
+	if (mFlickerTargetTime <= mFlickerElapsedTime) 
+		mFlickerElapsedTime = 0;
+
+	return FMath::Lerp(mFlickerCurrIntencity, mFlickerTargetIntencity, (mFlickerElapsedTime - mFlickerTargetTime) / mFlickerTargetTime);
+};
+void ALightObject::ActivateFlickerConstants()
+{
+	mbIsFlickerOverlapOnly = false;
+
 	if (FlickerBindAction.IsBound())
 		FlickerBindAction.Unbind();
 
 	mFlickerElapsedTime = 0;
 	mFlickerCurrIntencity = mPointLight->Intensity;
 
-	FlickerBindAction.BindUObject(this, &ALightObject::GetSinCycleIntencity);
+	FlickerBindAction.BindUObject(this, &ALightObject::GetConstantsIntencity);
 }
-
-void ALightObject::ActivateFlickerRandomCycle()
+float ALightObject::GetConstantsIntencity()
 {
+	if (mConstantArray[mCurrConstant] <= mFlickerElapsedTime) 
+	{
+		mFlickerElapsedTime = 0;
+		mConstantArray.Num() - 1 <= mCurrConstant ? mCurrConstant = 0 : mCurrConstant += 1;
+	}
+	return FMath::Lerp(mFlickerCurrIntencity, mFlickerTargetIntencity, (mFlickerElapsedTime / mConstantArray[mCurrConstant]));
+};
+void ALightObject::ActivateFlickerRandomLerp()
+{
+	mbIsFlickerOverlapOnly = false;
+
 	if (FlickerBindAction.IsBound())
 		FlickerBindAction.Unbind();
 
@@ -150,11 +196,31 @@ void ALightObject::ActivateFlickerRandomCycle()
 	mFlickerCurrIntencity = mPointLight->Intensity;
 	mFlickerTargetTime = FMath::RandRange(mRandCycleMinTime, mRandCycleMaxTime);
 
-	FlickerBindAction.BindUObject(this, &ALightObject::GeRandomCycleIntencity);
+	FlickerBindAction.BindUObject(this, &ALightObject::GeRandomIntencity);
 }
-
+float ALightObject::GeRandomIntencity() 
+{
+	if (mFlickerTargetTime < mFlickerElapsedTime)
+	{
+		mFlickerElapsedTime = 0;
+		mFlickerTargetTime = FMath::RandRange(mRandCycleMinTime, mRandCycleMaxTime);
+	}
+	return FMath::Lerp(mFlickerCurrIntencity, mFlickerTargetIntencity, mFlickerElapsedTime / mFlickerTargetTime);
+};
 void ALightObject::DeativateFlickerLight()
 {
+	mFlickerType = EFlickerType::EFT_None;
 	if (FlickerBindAction.IsBound())
 		FlickerBindAction.Unbind();
+}
+void ALightObject::Broken()
+{
+	if (mBrokenSound)
+	{
+		mAudioComponent->SetSound(mBrokenSound);
+	}
+	
+	mbUseBrokenOverlap = false;
+	DeativateFlickerLight();
+	mPointLight->DestroyComponent();
 }

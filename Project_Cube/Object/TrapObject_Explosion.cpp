@@ -3,6 +3,7 @@
 
 #include "TrapObject_Explosion.h"
 #include "Components/SphereComponent.h"
+#include "Components/AudioComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Project_Cube/Character/BaseHero.h"
@@ -58,8 +59,11 @@ void ATrapObject_Explosion::Explosion()
 	if (mOverlapParticle)
 		GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnParticle(mOverlapParticle, GetActorLocation(), mOverlapParticleSize);
 
-	if(mOverlapSound)
-		GetGameInstance<UMainGameInstance>()->SoundMng->PlayEffectSound(this, mOverlapSound);
+	if (mExploisionSound)
+	{
+		mAudioComponent->SetSound(mExploisionSound);
+		mAudioComponent->Play();
+	}
 
 	// 리스폰기능 사용.
 	if (mbUseRespawn)
