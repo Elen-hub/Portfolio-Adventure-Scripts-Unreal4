@@ -66,7 +66,8 @@ void ALightObject::Tick(float deltaTime)
 		mPointLight->SetIntensity(FlickerBindAction.Execute());
 	}
 	if (mLightBuzzSound)
-		mAudioComponent->SetVolumeMultiplier(mPointLight->Intensity*0.001f);
+		if(mPointLight)
+			mAudioComponent->SetVolumeMultiplier(mPointLight->Intensity*0.001f);
 }
 
 void ALightObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -213,14 +214,25 @@ void ALightObject::DeativateFlickerLight()
 	if (FlickerBindAction.IsBound())
 		FlickerBindAction.Unbind();
 }
+void ALightObject::SwitchOn()
+{
+	mPointLight->SetIntensity(mSwitchIntencity);
+}
+void ALightObject::SwitchOff()
+{
+	mPointLight->SetIntensity(0);
+}
 void ALightObject::Broken()
 {
 	if (mBrokenSound)
-	{
 		mAudioComponent->SetSound(mBrokenSound);
-	}
 	
 	mbUseBrokenOverlap = false;
 	DeativateFlickerLight();
 	mPointLight->DestroyComponent();
+	if (mBrokenSound)
+	{
+		mAudioComponent->SetVolumeMultiplier(1);
+		mAudioComponent->SetSound(mBrokenSound);
+	}
 }

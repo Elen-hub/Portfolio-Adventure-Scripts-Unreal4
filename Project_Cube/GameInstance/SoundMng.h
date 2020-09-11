@@ -6,16 +6,33 @@
 #include "UObject/NoExportTypes.h"
 #include "SoundMng.generated.h"
 
-/**
- * 
- */
+
+static const char* EventSounds[] = { "GraduallyHigh" , "GraduallyLow", "Appear", "SurpriseLow", "SurpriseMidium", "SurpriseHigh", "Bat" };
+
+UENUM()
+enum class EEventSound : uint8
+{
+	GraduallyHigh,
+	GraduallyLow,
+	Appear,
+	SurpriseLow,
+	SurpriseMidium,
+	SurpriseHigh,
+	Bat,
+
+	Max
+};
+
 UCLASS()
 class PROJECT_CUBE_API USoundMng : public UObject
 {
 	GENERATED_BODY()
 
 public:
+	USoundMng();
 	USoundMng* Init();
-	static void PlayEffectSound(const UObject* WorldContextObject, class USoundCue* sound);
-	static void StopEffectSound(USoundCue* sound);
+	void PlayEventSound(const UObject* WorldContextObject, const EEventSound soundType);
+
+private:
+	TMap<EEventSound, class USoundCue*>  mEventSoundMap;
 };
