@@ -40,7 +40,5 @@ public:
 	float BulletSpread;
 
 	void ActivateCollision(bool isActivate);
-	void Equip();
-	void Unequip();
 	void Reload(float magazine);
 };

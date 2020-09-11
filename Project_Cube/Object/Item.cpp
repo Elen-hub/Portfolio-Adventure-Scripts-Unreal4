@@ -30,14 +30,13 @@ AItem* AItem::Init()
 {
 	return this;
 }
-void AItem::Equip()
+void AItem::GetItem()
 {
-
-}
-
-void AItem::UnEquip()
-{
-
+	mMesh->SetSimulatePhysics(false);
+	mCollision->SetGenerateOverlapEvents(false);
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	SetActorTickEnabled(false);
 }
 FText AItem::GetItemSelectText()
 {

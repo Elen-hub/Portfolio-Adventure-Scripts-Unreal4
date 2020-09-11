@@ -27,15 +27,6 @@ void ABaseWeapon::ActivateCollision(bool isActivate)
 	mCollision->SetGenerateOverlapEvents(isActivate);
 }
 
-void ABaseWeapon::Equip()
-{
-
-}
-void ABaseWeapon::Unequip()
-{
-
-}
-
 void ABaseWeapon::Reload(float magazine)
 {
 }

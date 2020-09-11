@@ -25,9 +25,9 @@ protected:
 	
 public:
 	virtual AItem* Init();
+	virtual void GetItem();
+	virtual void SpawnItem() {};
 	FORCEINLINE EItemType GetWeaponType() { return mItemType; }
-	virtual void Equip();
-	virtual void UnEquip();
 	virtual FText GetItemSelectText();
 	EItemType GetItemType() { return mItemType; }
 };

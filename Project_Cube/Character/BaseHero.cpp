@@ -60,6 +60,7 @@ void ABaseHero::BeginPlay()
 	UMainGameInstance* mainGameInstance = GetGameInstance<UMainGameInstance>();
 	mainGameInstance->MainCharacter = this;
 	mainGameInstance->UIMng->Open<UMainUI>(EUIType::MainUI)->Enabled(this);
+	mainGameInstance->SoundMng->PlayBGM(this, EBGM::Ghostly_Villa);
 
 	mPlayerCamera->Set(this, mainGameInstance);
 }
@@ -203,6 +204,7 @@ void ABaseHero::GetItem()
 	case EItemType::EIT_Bullet:
 	case EItemType::EIT_Potion:
 	case EItemType::EIT_Other:
+		item->GetItem();
 		break;
 	default:
 		;

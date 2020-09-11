@@ -24,8 +24,18 @@ protected:
 	virtual void OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Default")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Sound")
 	class USoundWave* mIdleSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Light")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Sound")
+	class USoundWave* mChairSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Event")
 	class ALightObject* mLightlamp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Event")
+	class AItem* mItem;										// 이벤트 트리거 아이템
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Event")
+	class AStaticMeshActor* mWheelChair;		// 이벤트에 사용될 메쉬
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Event")
+	FVector mMoveChairPos;								// 이벤트시 이동될 메쉬의 위치
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Doll | Event")
+	FRotator mMoveChairRot;								// 이벤트시 이동된 메쉬의 각도
 };

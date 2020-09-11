@@ -6,29 +6,54 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Project_Cube/User.h"
+#include "Components/AudioComponent.h"
 
 USoundMng::USoundMng()
 {
 	// 사운드 디렉토리
-	FString uiDirecotry("SoundWave'/Game/Sounds/EffectSound/");
+	FString soundDirecotry("SoundWave'/Game/Sounds/EffectSound/");
 	for (int i = 0; i < (uint8)EEventSound::Max; ++i)
 	{
-		if (!mEventSoundMap.Contains((EEventSound)i))
+		if (!mSFXMap.Contains((EEventSound)i))
 		{
-			FString soundPath = uiDirecotry + "Event/" + EventSounds[i] + "_Cue." + EventSounds[i] + "_Cue'";
+			FString soundPath = soundDirecotry + "Event/" + EventSounds[i] + "_Cue." + EventSounds[i] + "_Cue'";
 			static ConstructorHelpers::FObjectFinder<USoundCue> sound(*soundPath);
-			mEventSoundMap.Add((EEventSound)i, sound.Object);
+			mSFXMap.Add((EEventSound)i, sound.Object);
 		}
 	}
+	FString bgmDirecotry("SoundWave'/Game/Sounds/Music/");
+	for (int i = 0; i < (uint8)EBGM::Max; ++i)
+	{
+		if (!mBGMMap.Contains((EBGM)i))
+		{
+			FString soundPath = bgmDirecotry + BGM[i] + "_Cue." + BGM[i] + "_Cue'";
+			static ConstructorHelpers::FObjectFinder<USoundCue> sound(*soundPath);
+			mBGMMap.Add((EBGM)i, sound.Object);
+		}
+	}
+
+	mSFXVolume = 1.f;
+	mBGMVolume = 0.5f;
 }
 
 USoundMng* USoundMng::Init()
 {
-
 	return this;
 }
 
 void USoundMng::PlayEventSound(const UObject* WorldContextObject, const EEventSound soundType)
 {
-	UGameplayStatics::PlaySound2D(WorldContextObject, mEventSoundMap[soundType]);
+	mSFXMap[soundType]->VolumeMultiplier = mSFXVolume;
+	UGameplayStatics::PlaySound2D(WorldContextObject, mSFXMap[soundType]);
+}
+
+void USoundMng::PlayBGM(const UObject* WorldContextObject, const EBGM soundType)
+{
+	if (mAudioComponent)
+	{
+		mAudioComponent->Stop();
+		mAudioComponent->DestroyComponent();
+		mAudioComponent = nullptr;
+	}
+	mAudioComponent = UGameplayStatics::SpawnSound2D(WorldContextObject, mBGMMap[soundType]);
 }

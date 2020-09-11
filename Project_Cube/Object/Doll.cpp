@@ -4,7 +4,9 @@
 #include "Doll.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
+#include "Engine/StaticMeshActor.h"
 #include "LightObject.h"
+#include "Item.h"
 
 ADoll::ADoll()
 {
@@ -30,6 +32,36 @@ void ADoll::BeginPlay()
 void ADoll::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
+
+	if (mItem != nullptr)
+	{
+		if (mItem->IsHidden())
+		{
+			mItem = nullptr;
+			if (mWheelChair != nullptr)
+			{
+				SetActorLocation(mMoveChairPos);
+				SetActorRotation(mMoveChairRot);
+				AddActorLocalOffset(FVector(0, 0, 50.f));
+				AddActorWorldRotation(FRotator(0, -90.f, 0));
+				
+				mLightlamp->Broken();
+				mWheelChair->SetActorLocation(mMoveChairPos);
+				mWheelChair->SetActorRotation(mMoveChairRot);
+				mAudioComponent->SetSound(mChairSound);
+				mAudioComponent->Play();
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%f"), GetLastRenderTime());
+
+		if (WasRecentlyRendered(0.01f))
+		{
+			mAudioComponent->Stop();
+		}
+	}
 }
 
 void ADoll::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -38,7 +70,7 @@ void ADoll::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* O
 	if (!Cast<ABaseHero>(OtherActor))
 		return;
 	
-	mAudioComponent->Stop();
+	mAudioComponent->StopDelayed(mDelayTime-0.5f);
 	Main->SoundMng->PlayEventSound(this, EEventSound::SurpriseLow);
 
 	SetDelayTimer(mLightlamp, &ALightObject::SwitchOn);
@@ -46,5 +78,6 @@ void ADoll::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 void ADoll::OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-
+	if (OtherActor != mItem)
+		return;
 }
