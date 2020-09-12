@@ -23,6 +23,7 @@ public:
 	void CameraLook(float rate);
 	class TArray<FHitResult> GetHitResultLookCrosshair();
 	class AItem* GetItemLookCrosshair();
+	class AInteractionObject* GetInteractionLookCrosshair();
 	FORCEINLINE FVector GetMuzzlePos();
 	FORCEINLINE FVector GetMuzzleRot();
 

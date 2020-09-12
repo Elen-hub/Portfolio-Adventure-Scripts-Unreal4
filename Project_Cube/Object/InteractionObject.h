@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+Ôªø// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -15,15 +15,15 @@ class PROJECT_CUBE_API AInteractionObject : public ABaseObject
 	GENERATED_BODY()
 	
 public:
-	AInteractionObject();
-	virtual void Tick(float deltatTime) override;
-	FString const* GetInteractionExplanation() { return &mInteractionExplanation; };
+	virtual FText const GetInteractionExplanation() { return mInteractionExplanation; };
+	virtual void Interaction() {};
 protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Collision")
-	class UPrimitiveComponent* mInteractionCollision;			// Traceø° √Êµπ«“ ¿Œ≈Õ∑∫º« π¸¿ß
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event | Collision")
-	FString mInteractionExplanation;
+	// TraceÏóê Ï∂©ÎèåÌï† Ïù∏ÌÑ∞Î†âÏÖò Î≤îÏúÑ
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	class UPrimitiveComponent* mInteractionCollision;			
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	FText mInteractionExplanation;
 };

@@ -8,6 +8,7 @@
 #include "Project_Cube/UI/MainUI.h"
 #include "Project_Cube/UI/MainUI_ItemText.h"
 #include "Project_Cube/Character/BaseCharacter.h"
+#include "Project_Cube/Object/InteractionObject.h"
 
 UPlayerCameraFunction::UPlayerCameraFunction()
 {
@@ -65,6 +66,23 @@ AItem* UPlayerCameraFunction::GetItemLookCrosshair()
 	}
 	return nullptr;
 }
+AInteractionObject* UPlayerCameraFunction::GetInteractionLookCrosshair()
+{
+	const FVector& worldStartP = mCamera->GetComponentLocation();
+	FVector worldEndP = worldStartP + mCamera->GetForwardVector() * (mCameraSpringArm->TargetArmLength + 200.f);
+	TArray<FHitResult> HitInfo;
+	FCollisionQueryParams queryParams;
+	FCollisionObjectQueryParams objectParams = FCollisionObjectQueryParams::AllDynamicObjects;
+	if (GetWorld()->LineTraceMultiByObjectType(HitInfo, worldStartP, worldEndP, objectParams, queryParams))
+	{
+		for (FHitResult result : HitInfo)
+		{
+			if (AInteractionObject* firstResultObject = Cast<AInteractionObject>(result.GetActor()))
+				return firstResultObject;
+		}
+	}
+	return nullptr;
+}
 FVector UPlayerCameraFunction::GetMuzzlePos()
 {
 	return mCamera->GetComponentLocation() + mCamera->GetForwardVector() * mCameraSpringArm->TargetArmLength;
@@ -86,7 +104,12 @@ void UPlayerCameraFunction::TickComponent(float DeltaTime, ELevelTick TickType, 
 			// 아이템이 검출된다면
 			if (AItem* firstResultItem = Cast<AItem>(result.GetActor()))
 			{
-				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultItem);
+				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultItem, firstResultItem->GetItemSelectText(), EItemTextType::Item);
+				return;
+			}
+			if (AInteractionObject* firstResultObject = Cast<AInteractionObject>(result.GetActor()))
+			{
+				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultObject, firstResultObject->GetInteractionExplanation(), EItemTextType::Interaction);
 				return;
 			}
 		}

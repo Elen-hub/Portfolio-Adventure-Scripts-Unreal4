@@ -9,6 +9,13 @@
 /**
  * 
  */
+UENUM()
+enum class EItemTextType : uint8
+{
+	Item,
+	Interaction
+};
+
 UCLASS()
 class PROJECT_CUBE_API UMainUI_ItemText : public UUserWidget
 {
@@ -16,14 +23,17 @@ class PROJECT_CUBE_API UMainUI_ItemText : public UUserWidget
 	
 private:
 	UPROPERTY()
-	class AItem* mItem;
+	class AActor* mItem;
 	UPROPERTY()
 	class UTextBlock* mNameText;
+	UPROPERTY()
+	class UTextBlock* mKeyText;
 	FVector mAddPos;
+	TMap<EItemTextType, FText> mSelectKeyMap;
 protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 public:
-	void Enabled(AItem* item);
+	void Enabled(AActor* item, FText text, const EItemTextType type);
 	void Disabled();
 };

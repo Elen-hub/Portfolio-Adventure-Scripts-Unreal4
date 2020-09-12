@@ -12,6 +12,7 @@
 #include "Project_Cube/Object/BaseWeapon.h"
 #include "Project_Cube/Object/Bullet.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Project_Cube/Object/InteractionObject.h"
 
 #include "Stat.h"
 #include "Project_Cube/GameInstance/UIMng.h"
@@ -180,7 +181,14 @@ void ABaseHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MouseY", mPlayerCamera, &UPlayerCameraFunction::CameraMoveUp);
 	PlayerInputComponent->BindAxis("MouseWheel", mPlayerCamera, &UPlayerCameraFunction::CameraLook);
 }
+void ABaseHero::Interaction()
+{
+	AInteractionObject* object = mPlayerCamera->GetInteractionLookCrosshair();
+	if (object == nullptr)
+		return;
 
+	object->Interaction();
+}
 void ABaseHero::GetItem()
 {
 	AItem* item = mPlayerCamera->GetItemLookCrosshair();
@@ -313,10 +321,6 @@ void ABaseHero::Reload()
 	// 애니메이션 몽타주 설정
 	mAnimInstance->Montage_Play(mCombatMontage, 1.0f);
 	mAnimInstance->Montage_JumpToSection(FName("Reload"), mCombatMontage);
-}
-void ABaseHero::Interaction()
-{
-
 }
 void ABaseHero::MoveForward(float axis)
 {

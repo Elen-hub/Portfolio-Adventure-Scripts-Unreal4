@@ -44,37 +44,52 @@ protected:
 	USoundWave* mLightBuzzSound;
 
 	// Siwtch Option
+	// 스위치 이벤트 사용
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Switch")
-	bool mbUseSwitchEvent;				// 스위치 이벤트 사용
+	bool mbUseSwitchEvent;				
+	// 스위치 이벤트 중 True:Enter False:Exit (정방향) 을사용
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Switch")
-	bool mbSwitchOverlapEnter;		// 스위치 이벤트 중 True:Enter False:Exit (정방향) 을사용
+	bool mbSwitchOverlapEnter;	
+	// 목표 빛의 세기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Switch")
-	float mSwitchIntencity;				// 목표 빛의 세기
+	float mSwitchIntencity;			
 
 	// Flicker Option
+		// 오버렙 이벤트만 사용
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	bool mbIsFlickerOverlapOnly;		// 오버렙 이벤트만 사용
+	bool mbIsFlickerOverlapOnly;	
+	// 오버렙 이벤트 중 True:Enter False:Exit 를 사용
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	bool mbFlickerOverlapEnter;		// 오버렙 이벤트 중 True:Enter False:Exit 를 사용
+	bool mbFlickerOverlapEnter;	
+	// 플리커타입
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	EFlickerType mFlickerType;			// 플리커타입
+	EFlickerType mFlickerType;		
+	// 랜덤타입시 랜덤최솟값
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	float mRandCycleMinTime;			// 랜덤타입시 랜덤최솟값
+	float mRandCycleMinTime;			
+	// 랜덤타입시 랜덤최솟값
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	float mRandCycleMaxTime;			// 랜덤타입시 랜덤최솟값
+	float mRandCycleMaxTime;		
+	// 상수연속실행값
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	TArray<float> mConstantArray;	// 상수연속실행값
+	TArray<float> mConstantArray;
+	// 현제 진행상수
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light | Flicker")
-	float mCurrConstant;					// 현제 진행상수
+	float mCurrConstant;				
+	// 현제 플리커 지속시간
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light | Flicker")
-	float mFlickerElapsedTime;			// 현제 플리커 지속시간
+	float mFlickerElapsedTime;		
+	// 목표 플리커 시간
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	float mFlickerTargetTime;			// 목표 플리커 시간
+	float mFlickerTargetTime;		
+	// 시작 빛의 세기
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light | Flicker")
-	float mFlickerCurrIntencity;			// 시작 빛의 세기
+	float mFlickerCurrIntencity;		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-	float mFlickerTargetIntencity;		// 목표 빛의 세기
-	FlickerAction FlickerBindAction;	// 플리커 함수 델리게이트
+		// 목표 빛의 세기
+	float mFlickerTargetIntencity;		
+	// 플리커 함수 델리게이트
+	FlickerAction FlickerBindAction;	
 	
 	// Broken Option
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Broken")
