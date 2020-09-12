@@ -44,7 +44,7 @@ USoundMng* USoundMng::Init()
 void USoundMng::PlayEventSound(const UObject* WorldContextObject, const EEventSound soundType)
 {
 	mSFXMap[soundType]->VolumeMultiplier = mSFXVolume;
-	UGameplayStatics::PlaySound2D(WorldContextObject, mSFXMap[soundType]);
+	UGameplayStatics::PlaySound2D(WorldContextObject, mSFXMap[soundType], mSFXVolume);
 }
 
 void USoundMng::PlayBGM(const UObject* WorldContextObject, const EBGM soundType)
@@ -55,5 +55,6 @@ void USoundMng::PlayBGM(const UObject* WorldContextObject, const EBGM soundType)
 		mAudioComponent->DestroyComponent();
 		mAudioComponent = nullptr;
 	}
-	mAudioComponent = UGameplayStatics::SpawnSound2D(WorldContextObject, mBGMMap[soundType]);
+	mAudioComponent = UGameplayStatics::SpawnSound2D(WorldContextObject, mBGMMap[soundType], mBGMVolume);
+	mAudioComponent->Play();
 }

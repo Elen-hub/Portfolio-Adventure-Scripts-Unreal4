@@ -17,7 +17,7 @@ public:
 	float TRecoveryStamina;
 	float TMouseAxis = 65.f;
 protected:
-	UPROPERTY(EditAnywhere, Category = "SpringFunction")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SpringFunction")
 	class USprintFunction* mSprintFunction;
 	UPROPERTY(EditAnywhere, Category = "PlayerCamera")
 	class UPlayerCameraFunction* mPlayerCamera;

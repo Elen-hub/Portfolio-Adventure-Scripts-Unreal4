@@ -21,6 +21,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 protected:
-	UPROPERTY(EditAnywhere, Category = "Trap | Particle")
+	UPROPERTY(EditAnywhere, Category = "Item | Particle")
 	class UParticleSystemComponent* mParticleIdle;
+	UPROPERTY(EditAnywhere, Category = "Item | Particle")
+	float mParticleSize;
 };

@@ -3,6 +3,7 @@
 #include "Camera/CameraComponent.h"
 #include "BaseCharacter.h"
 #include "Project_Cube/Object/Item.h"
+#include "Project_Cube/Object/InteractionObject.h"
 #include "Project_Cube/GameInstance/MainGameInstance.h"
 #include "Project_Cube/UI/MainUI.h"
 #include "Project_Cube/UI/MainUI_ItemText.h"
@@ -14,6 +15,7 @@ UPlayerCameraFunction::UPlayerCameraFunction()
 
 	TMouseAxis = 65.f;
 }
+
 UPlayerCameraFunction* UPlayerCameraFunction::Init(USpringArmComponent* springArm, UCameraComponent* camera)
 {
 	mCamera = camera;
@@ -33,20 +35,31 @@ void UPlayerCameraFunction::SetRebound(const float pitch, const float yaw)
 	mTargetCharacter->AddControllerYawInput(yaw* GetWorld()->GetDeltaSeconds());
 }
 
-// 크로스헤어에서 보이는 아이템포인터를 얻는함수
+// 크로스헤어에서 보이는 충돌오브젝트를 모두 얻는함수
+TArray<FHitResult> UPlayerCameraFunction::GetHitResultLookCrosshair()
+{
+	const FVector& worldStartP = mCamera->GetComponentLocation();
+	FVector worldEndP = worldStartP + mCamera->GetForwardVector() * (mCameraSpringArm->TargetArmLength + 200.f);
+	TArray<FHitResult> HitInfo;
+	FCollisionQueryParams queryParams;
+	FCollisionObjectQueryParams objectParams = FCollisionObjectQueryParams::AllDynamicObjects;
+	GetWorld()->LineTraceMultiByObjectType(HitInfo, worldStartP, worldEndP, objectParams, queryParams);
+	return HitInfo;
+}
+
+// 크로스헤어에서 보이는 첫번째 아이템을 얻는 함수
 AItem* UPlayerCameraFunction::GetItemLookCrosshair()
 {
 	const FVector& worldStartP = mCamera->GetComponentLocation();
 	FVector worldEndP = worldStartP + mCamera->GetForwardVector() * (mCameraSpringArm->TargetArmLength + 200.f);
 	TArray<FHitResult> HitInfo;
 	FCollisionQueryParams queryParams;
-	FCollisionObjectQueryParams objectParams = FCollisionObjectQueryParams::AllObjects;
+	FCollisionObjectQueryParams objectParams = FCollisionObjectQueryParams::AllDynamicObjects;
 	if (GetWorld()->LineTraceMultiByObjectType(HitInfo, worldStartP, worldEndP, objectParams, queryParams))
 	{
 		for (FHitResult result : HitInfo)
 		{
-			// 아이템이 하나라도 검출된다면
-			if(AItem* item = Cast<AItem>(result.GetActor()))
+			if (AItem* item = Cast<AItem>(result.GetActor()))
 				return item;
 		}
 	}
@@ -64,15 +77,21 @@ void UPlayerCameraFunction::TickComponent(float DeltaTime, ELevelTick TickType, 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (AItem* item = GetItemLookCrosshair())
+	TArray<FHitResult> hitInfo = GetHitResultLookCrosshair();
+	if(hitInfo.Num() > 0)
 	{
-		mMainGameInstance->UIMng->GetItemText()->Enabled(item);
-		return;
+		// 최초검출 아이템
+		for (FHitResult result : hitInfo)
+		{
+			// 아이템이 검출된다면
+			if (AItem* firstResultItem = Cast<AItem>(result.GetActor()))
+			{
+				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultItem);
+				return;
+			}
+		}
 	}
-	else
-	{
-		mMainGameInstance->UIMng->GetItemText()->Disabled();
-	}
+	mMainGameInstance->UIMng->GetItemText()->Disabled();
 }
 
 void UPlayerCameraFunction::CameraMoveSide(float axis)

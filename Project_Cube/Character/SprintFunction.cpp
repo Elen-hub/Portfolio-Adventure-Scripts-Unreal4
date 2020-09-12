@@ -39,25 +39,22 @@ void USprintFunction::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	{
 		// 증감
 		if (mbUseSprint)
-		{
 			mCurrStamina = FMath::Clamp<float>(mCurrStamina - 20.f * DeltaTime, 0, *mMaxStamina);
+		else
+			mCurrStamina = FMath::Clamp<float>(mCurrStamina + *mRecoveryStamina * DeltaTime, 0, *mMaxStamina);
+
+		// 상태변경
+		if (mCurrStamina < *mMaxStamina * mExhaustedStamina)
+		{
+			mSprintState = ESprintState::ESS_Exhausted;
+			if (mCurrStamina <= 0)
+			{
+				mbUseSprint = false;
+				mSprintState = ESprintState::ESS_Fatal;
+			}
 		}
 		else
-		{
-			mCurrStamina = FMath::Clamp<float>(mCurrStamina + *mRecoveryStamina * DeltaTime, 0, *mMaxStamina);
-			// 상태변경
-			if (mCurrStamina < *mMaxStamina * mExhaustedStamina)
-			{
-				mSprintState = ESprintState::ESS_Exhausted;
-				if (mCurrStamina <= 0)
-				{
-					mbUseSprint = false;
-					mSprintState = ESprintState::ESS_Fatal;
-				}
-			}
-			else
-				mSprintState = ESprintState::ESS_Default;;
-		}
+			mSprintState = ESprintState::ESS_Default;;
 	}
 }
 

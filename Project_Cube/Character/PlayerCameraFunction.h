@@ -21,8 +21,8 @@ public:
 	void CameraMoveSide(float axis);
 	void CameraMoveUp(float axis);
 	void CameraLook(float rate);
+	class TArray<FHitResult> GetHitResultLookCrosshair();
 	class AItem* GetItemLookCrosshair();
-
 	FORCEINLINE FVector GetMuzzlePos();
 	FORCEINLINE FVector GetMuzzleRot();
 
