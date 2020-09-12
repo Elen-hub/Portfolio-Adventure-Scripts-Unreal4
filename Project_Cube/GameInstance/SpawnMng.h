@@ -17,7 +17,7 @@ class PROJECT_CUBE_API USpawnMng : public UObject
 public:
 	USpawnMng();
 	USpawnMng* Init(class UMainGameInstance* gameInstance);
-	template <class T = AActor> T* SpawnActor(UClass* refActor);
+	template <class T = AActor> T* SpawnActor(UClass* refActor, FVector const& location, FRotator const& rotation);
 	class UParticleSystemComponent* SpawnParticle(class UParticleSystem* particle, FVector const& spawnPos, float const& particleSize = 1.f);
 private:
 	TMap<UClass*, FSpawnActorHandler*> mSpawnedActorMap;
@@ -26,7 +26,7 @@ private:
 };
 
 template<class T>
-T* USpawnMng::SpawnActor(UClass* refActor)
+T* USpawnMng::SpawnActor(UClass* refActor, FVector const& location = FVector::ZeroVector, FRotator const& rotation = FRotator::ZeroRotator)
 {
 	if (!mSpawnedActorMap.Contains(refActor))
 		mSpawnedActorMap.Add(refActor, new FSpawnActorHandler());
@@ -35,7 +35,7 @@ T* USpawnMng::SpawnActor(UClass* refActor)
 	if (!spawnActor)
 	{
 		const FActorSpawnParameters spawnParameters;
-		spawnActor = mGameInstance->GetWorld()->SpawnActor<AActor>(refActor, FVector::ZeroVector, FRotator::ZeroRotator, spawnParameters);
+		spawnActor = mGameInstance->GetWorld()->SpawnActor<AActor>(refActor, location, rotation, spawnParameters);
 		mSpawnedActorMap[refActor]->ActorArray.Add(spawnActor);
 	}
 	return Cast<T>(spawnActor);

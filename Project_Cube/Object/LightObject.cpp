@@ -12,6 +12,10 @@ ALightObject::ALightObject()
 	UBoxComponent* boxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Event Collision"));
 	mCollision = boxCollision;
 	mCollision->SetupAttachment(GetRootComponent());
+	mCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	mCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	mCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	mPointLight = CreateDefaultSubobject< UPointLightComponent>(TEXT("Point Light"));
 	mPointLight->SetupAttachment(GetRootComponent());
@@ -224,6 +228,9 @@ void ALightObject::SwitchOff()
 }
 void ALightObject::Broken()
 {
+	if (mPointLight == nullptr)
+		return;
+
 	if (mBrokenSound)
 		mAudioComponent->SetSound(mBrokenSound);
 	

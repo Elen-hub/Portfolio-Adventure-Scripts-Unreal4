@@ -15,8 +15,20 @@ class PROJECT_CUBE_API AInvisibleGhost : public ABaseMonster
 	GENERATED_BODY()
 
 public:
-	AInvisibleGhost::AInvisibleGhost();
-
+	AInvisibleGhost();
+	virtual void Tick(float deltaTime) override;
 protected:
 	virtual void BeginPlay() override;
+	UFUNCTION()
+	virtual void OnBrokenEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event")
+	class USphereComponent* mBrokenLampOverlap;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
+	class USoundWave* mStepSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
+	float mSoundTargetRange;
+
+private:
+	float mSoundElapsedRange;
 };

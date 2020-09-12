@@ -42,6 +42,7 @@ void UMainUI_ItemText::Enabled(AActor* item, FText text, const EItemTextType typ
 void UMainUI_ItemText::Disabled()
 {
 	SetVisibility(ESlateVisibility::Hidden);
+	mNameText->SetText(FText::GetEmpty());
 	mItem = nullptr;
 }
 void UMainUI_ItemText::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

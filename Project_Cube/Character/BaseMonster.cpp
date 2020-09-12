@@ -4,12 +4,7 @@
 #include "Components/SphereComponent.h"
 #include "AIController.h"
 #include "StatFunction.h"
-
 #include "Project_Cube/StateMachine/BaseState.h"
-#include "Project_Cube/StateMachine/Chase_Melee.h"
-#include "Project_Cube/StateMachine/Idle_Default.h"
-#include "Project_Cube/StateMachine/Return_Default.h"
-#include "Project_Cube/StateMachine/Death_Default.h"
 
 ABaseMonster::ABaseMonster()
 {
@@ -40,21 +35,6 @@ void ABaseMonster::BeginPlay()
 	stat->SP = 100.f;
 
 	mStatFunction->Init(info, stat);
-
-	Idle_Default* idleState = new Idle_Default();
-	idleState->Init(this);
-	FunctionToStateMap.Add(ECharacterState::ECS_Idle, idleState);
-	Chase_Melee* chaseState = new Chase_Melee();
-	chaseState->Init(this);
-	FunctionToStateMap.Add(ECharacterState::ECS_Chase, chaseState);
-
-	Return_Default* returnState = new Return_Default();
-	returnState->Init(this);
-	FunctionToStateMap.Add(ECharacterState::ECS_Return, returnState);
-
-	Death_Default* deathState = new Death_Default();
-	deathState->Init(this);
-	FunctionToStateMap.Add(ECharacterState::ECS_Death, deathState);
 }
 void ABaseMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
@@ -78,6 +58,7 @@ void ABaseMonster::SetCharacterState(const ECharacterState nextState)
 	FunctionToStateMap[mCharacterState]->OnStateExit();
 	mCharacterState = nextState;
 	FunctionToStateMap[mCharacterState]->OnStateBegin();
+
 }
 void ABaseMonster::OnAgroCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

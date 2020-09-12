@@ -26,6 +26,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	class UAnimMontage* mCombatMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	class UAudioComponent* mAudioComponent;
+
 	// Hit option
 	float mHitTargetTime;
 	float mHitElapsedTime;
