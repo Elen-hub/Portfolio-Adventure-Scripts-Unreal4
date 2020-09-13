@@ -8,4 +8,4 @@
 
 /StateMachine/ 논플레이어 캐릭터의 FSM 기능
 
-/UI/ Widget
+/UI/ Widget/ 위젯
