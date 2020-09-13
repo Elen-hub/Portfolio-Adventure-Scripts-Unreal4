@@ -17,7 +17,7 @@ ALightObject::ALightObject()
 	mCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	mCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
-	mPointLight = CreateDefaultSubobject< UPointLightComponent>(TEXT("Point Light"));
+	mPointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Point Light"));
 	mPointLight->SetupAttachment(GetRootComponent());
 }
 
@@ -95,8 +95,6 @@ void ALightObject::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AA
 	{
 		if (mbFlickerOverlapEnter)
 		{
-			if (!mbIsFlickerOverlapOnly)
-			{
 				switch (mFlickerType)
 				{
 				case EFlickerType::EFT_Default:
@@ -112,7 +110,13 @@ void ALightObject::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AA
 				default:
 					;
 				}
-			}
+		}
+	}
+	if (mbUseSwitchEvent)
+	{
+		if (mbSwitchOverlapEnter)
+		{
+			SwitchOn();
 		}
 	}
 }
@@ -145,6 +149,13 @@ void ALightObject::OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AAc
 			default:
 				;
 			}
+		}
+	}
+	if (mbUseSwitchEvent)
+	{
+		if (!mbSwitchOverlapEnter)
+		{
+			SwitchOn();
 		}
 	}
 }
@@ -221,6 +232,12 @@ void ALightObject::DeativateFlickerLight()
 void ALightObject::SwitchOn()
 {
 	mPointLight->SetIntensity(mSwitchIntencity);
+	if (mSwitchOnSound)
+	{
+		mAudioComponent->SetSound(mSwitchOnSound);
+		mAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume());
+		mAudioComponent->Play();
+	}
 }
 void ALightObject::SwitchOff()
 {

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -42,60 +42,62 @@ protected:
 	class UPointLightComponent* mPointLight;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | PointLight")
 	USoundWave* mLightBuzzSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | PointLight")
+	USoundWave* mSwitchOnSound;
 
 	// Siwtch Option
-	// ½ºÀ§Ä¡ ÀÌº¥Æ® »ç¿ë
+	// ìŠ¤ìœ„ì¹˜ ì´ë²¤íŠ¸ ì‚¬ìš©
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Switch")
 	bool mbUseSwitchEvent;				
-	// ½ºÀ§Ä¡ ÀÌº¥Æ® Áß True:Enter False:Exit (Á¤¹æÇâ) À»»ç¿ë
+	// ìŠ¤ìœ„ì¹˜ ì´ë²¤íŠ¸ ì¤‘ True:Enter False:Exit (ì •ë°©í–¥) ì„ì‚¬ìš©
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Switch")
 	bool mbSwitchOverlapEnter;	
-	// ¸ñÇ¥ ºûÀÇ ¼¼±â
+	// ëª©í‘œ ë¹›ì˜ ì„¸ê¸°
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Switch")
 	float mSwitchIntencity;			
 
 	// Flicker Option
-		// ¿À¹ö·¾ ÀÌº¥Æ®¸¸ »ç¿ë
+	// ì˜¤ë²„ë ™ ì´ë²¤íŠ¸ë§Œ ì‚¬ìš©
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	bool mbIsFlickerOverlapOnly;	
-	// ¿À¹ö·¾ ÀÌº¥Æ® Áß True:Enter False:Exit ¸¦ »ç¿ë
+	// ì˜¤ë²„ë ™ ì´ë²¤íŠ¸ ì¤‘ True:Enter False:Exit ë¥¼ ì‚¬ìš©
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	bool mbFlickerOverlapEnter;	
-	// ÇÃ¸®Ä¿Å¸ÀÔ
+	// í”Œë¦¬ì»¤íƒ€ì…
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	EFlickerType mFlickerType;		
-	// ·£´ıÅ¸ÀÔ½Ã ·£´ıÃÖ¼Ú°ª
+	// ëœë¤íƒ€ì…ì‹œ ëœë¤ìµœì†Ÿê°’
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	float mRandCycleMinTime;			
-	// ·£´ıÅ¸ÀÔ½Ã ·£´ıÃÖ¼Ú°ª
+	// ëœë¤íƒ€ì…ì‹œ ëœë¤ìµœì†Ÿê°’
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	float mRandCycleMaxTime;		
-	// »ó¼ö¿¬¼Ó½ÇÇà°ª
+	// ìƒìˆ˜ì—°ì†ì‹¤í–‰ê°’
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	TArray<float> mConstantArray;
-	// ÇöÁ¦ ÁøÇà»ó¼ö
+	// í˜„ì œ ì§„í–‰ìƒìˆ˜
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light | Flicker")
 	float mCurrConstant;				
-	// ÇöÁ¦ ÇÃ¸®Ä¿ Áö¼Ó½Ã°£
+	// í˜„ì œ í”Œë¦¬ì»¤ ì§€ì†ì‹œê°„
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light | Flicker")
 	float mFlickerElapsedTime;		
-	// ¸ñÇ¥ ÇÃ¸®Ä¿ ½Ã°£
+	// ëª©í‘œ í”Œë¦¬ì»¤ ì‹œê°„
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
 	float mFlickerTargetTime;		
-	// ½ÃÀÛ ºûÀÇ ¼¼±â
+	// ì‹œì‘ ë¹›ì˜ ì„¸ê¸°
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light | Flicker")
 	float mFlickerCurrIntencity;		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Flicker")
-		// ¸ñÇ¥ ºûÀÇ ¼¼±â
+		// ëª©í‘œ ë¹›ì˜ ì„¸ê¸°
 	float mFlickerTargetIntencity;		
-	// ÇÃ¸®Ä¿ ÇÔ¼ö µ¨¸®°ÔÀÌÆ®
+	// í”Œë¦¬ì»¤ í•¨ìˆ˜ ë¸ë¦¬ê²Œì´íŠ¸
 	FlickerAction FlickerBindAction;	
 	
 	// Broken Option
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Broken")
-	bool mbUseBrokenOverlap;			// ¿À¹ö·¾ ÀÌº¥Æ®½Ã ºÎ¼ÅÁö´Â È¿°ú¸¦ ¹ŞÀ½
+	bool mbUseBrokenOverlap;			// ì˜¤ë²„ë ™ ì´ë²¤íŠ¸ì‹œ ë¶€ì…”ì§€ëŠ” íš¨ê³¼ë¥¼ ë°›ìŒ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Broken")
-	bool mbBrokenOverlapEnter;		// ¿À¹ö·¾ ÀÌº¥Æ® Áß True:Enter False:Exit ¸¦ »ç¿ë
+	bool mbBrokenOverlapEnter;		// ì˜¤ë²„ë ™ ì´ë²¤íŠ¸ ì¤‘ True:Enter False:Exit ë¥¼ ì‚¬ìš©
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light | Broken")
-	USoundWave* mBrokenSound;		// ¿À¹ö·¾ ÀÌº¥Æ® Áß True:Enter False:Exit ¸¦ »ç¿ë
+	USoundWave* mBrokenSound;		// ì˜¤ë²„ë ™ ì´ë²¤íŠ¸ ì¤‘ True:Enter False:Exit ë¥¼ ì‚¬ìš©
 };

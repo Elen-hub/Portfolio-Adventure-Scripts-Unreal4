@@ -47,7 +47,7 @@ ABaseHero::ABaseHero()
 void ABaseHero::BeginPlay()
 {
 	Super::BeginPlay();
-	TSpeed = 200.f;
+	TSpeed = 300.f;
 	APlayerController* controller = Cast<APlayerController>(GetController());
 	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), -1*GetMesh()->GetComponentRotation());
 
@@ -61,7 +61,6 @@ void ABaseHero::BeginPlay()
 	UMainGameInstance* mainGameInstance = GetGameInstance<UMainGameInstance>();
 	mainGameInstance->MainCharacter = this;
 	mainGameInstance->UIMng->Open<UMainUI>(EUIType::MainUI)->Enabled(this);
-	mainGameInstance->SoundMng->PlayBGM(this, EBGM::Ghostly_Villa);
 
 	mPlayerCamera->Set(this, mainGameInstance);
 }

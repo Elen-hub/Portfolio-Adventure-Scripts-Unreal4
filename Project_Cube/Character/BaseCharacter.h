@@ -39,6 +39,7 @@ protected:
 public:
 	ABaseCharacter();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
 	float TSpeed = 400.f;
 	FVector TInputVector;
 	FVector TestInitPos;

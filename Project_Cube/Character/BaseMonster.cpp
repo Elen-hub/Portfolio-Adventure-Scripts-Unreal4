@@ -62,14 +62,10 @@ void ABaseMonster::SetCharacterState(const ECharacterState nextState)
 }
 void ABaseMonster::OnAgroCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor == this)
-		return;
-
 	// 플레이어와 겹칠경우 타겟설정 후 Chase 상태이동
-	ABaseCharacter* character = Cast<ABaseCharacter>(OtherActor);
-	if (!character)
-		return;
-
-	mTarget = Cast<ABaseCharacter>(OtherActor);
-	SetCharacterState(ECharacterState::ECS_Chase);
+	if (ABaseHero* character = Cast<ABaseHero>(OtherActor))
+	{
+		mTarget = character;
+		SetCharacterState(ECharacterState::ECS_Chase);
+	}
 }

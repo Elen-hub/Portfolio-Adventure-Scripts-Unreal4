@@ -55,12 +55,8 @@ void ADoll::Tick(float deltaTime)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%f"), GetLastRenderTime());
-
-		if (WasRecentlyRendered(0.01f))
-		{
+		if (Lib::IsPrimitiveComponentRenderedRecently(mMesh, deltaTime))
 			mAudioComponent->Stop();
-		}
 	}
 }
 

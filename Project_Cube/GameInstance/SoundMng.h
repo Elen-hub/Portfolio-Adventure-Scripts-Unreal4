@@ -7,12 +7,14 @@
 #include "SoundMng.generated.h"
 
 
-static const char* EventSounds[] = { "GraduallyHigh" , "GraduallyLow", "Appear", "SurpriseLow", "SurpriseMidium", "SurpriseHigh", "Bat" };
-static const char* BGM[] = { "Main", "Mistery","Ghostly_Villa", "Frozen" };
+static const char* EventSounds[] = { "Blank", "GraduallyHigh" , "GraduallyLow", "Appear", "SurpriseLow", "SurpriseMidium", "SurpriseHigh", "Bat" };
+static const char* BGM[] = { "Blank", "Main", "Mistery","Ghostly_Villa", "Frozen" };
 
 UENUM()
 enum class EEventSound : uint8
 {
+	None,
+
 	GraduallyHigh,
 	GraduallyLow,
 	Appear,
@@ -26,6 +28,8 @@ enum class EEventSound : uint8
 UENUM()
 enum class EBGM : uint8
 {
+	None,
+
 	Main,
 	Mistery,
 	Ghostly_Villa,
@@ -48,6 +52,8 @@ public:
 	FORCEINLINE float GetSFXVolume() { return mSFXVolume; }
 	void SetBGMVolume(float volume) { mBGMVolume = volume; }
 	void SetSFXVolume(float volume) { mSFXVolume = volume; }
+protected:
+	EBGM mCurrBGM;
 private:
 	TMap<EEventSound, class USoundCue*>  mSFXMap;
 	TMap<EBGM, class USoundCue*>  mBGMMap;
