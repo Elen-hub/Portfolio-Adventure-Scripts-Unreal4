@@ -8,15 +8,14 @@
 /**
  * 
  */
-class PROJECT_CUBE_API Chase_Melee : public BaseState
+class PROJECT_CUBE_API Attack_Melee : public BaseState
 {
 public:
-	Chase_Melee() {};
+	Attack_Melee() {};
 	virtual void OnStateBegin() override;
 	virtual void OnStateStay() override;
 	virtual void OnStateExit() override;
 
-
 private:
-	float mStepSoundElapsedTime;
+	int mAttackCount;
 };

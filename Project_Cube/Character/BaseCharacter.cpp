@@ -38,6 +38,12 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->MaxAcceleration = 500.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 50.f;
 
+	mCharacterSoundMap.Add(ECharacterSoundType::Idle, mIdleSound);
+	mCharacterSoundMap.Add(ECharacterSoundType::Move, mMoveSound);
+	mCharacterSoundMap.Add(ECharacterSoundType::Hit, mHitSound);
+	mCharacterSoundMap.Add(ECharacterSoundType::Death, mDeathSound);
+
+	mStepSoundTargetTime = 100.f;
 	TInputVector = FVector(0.f);
 }
 void ABaseCharacter::BeginPlay()
@@ -57,7 +63,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	// 경직시간 갱신
 	if (mbIsHit) mHitElapsedTime += DeltaTime;
-
+	// 공격시간 갱신
+	if (mAttackElapsedTime >= 0)	mAttackElapsedTime -= DeltaTime;
 	// 이동속도 갱신
 	GetCharacterMovement()->MaxWalkSpeed = TSpeed;
 	// mFunctionToStateMap[mCharacterState]->OnStateStay;
@@ -100,4 +107,22 @@ void ABaseCharacter::WalkStart()
 void ABaseCharacter::WalkEnd()
 {
 	mbIsWalk = false;
+}
+
+void ABaseCharacter::PlaySound(const ECharacterSoundType sound)
+{
+	if (!mCharacterSoundMap.Contains(sound))
+		return;
+
+	if(mAudioComponent->Sound != mCharacterSoundMap[sound])
+		mAudioComponent->SetSound(mCharacterSoundMap[sound]);
+
+	mAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume());
+	mAudioComponent->Play();
+}
+
+void ABaseCharacter::StopSound()
+{
+	if(mAudioComponent->IsPlaying())
+		mAudioComponent->Stop();
 }

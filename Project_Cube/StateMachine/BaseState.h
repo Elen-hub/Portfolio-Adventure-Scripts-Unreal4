@@ -4,6 +4,7 @@
 
 #include "Components/SphereComponent.h"
 #include "AIController.h"
+#include "Animation/AnimInstance.h"
 #include "Project_Cube/Character/BaseCharacter.h"
 #include "CoreMinimal.h"
 /**
@@ -14,10 +15,12 @@ class PROJECT_CUBE_API BaseState
 protected:
 	ABaseCharacter* mCharacter;
 	AAIController* mAIController;
+	UAnimInstance* mAnimInstance;
 public:
 	virtual BaseState* Init(ABaseCharacter* targetCharacter)
 	{
 		mCharacter = targetCharacter;
+		mAnimInstance = mCharacter->GetMesh()->GetAnimInstance();
 		mAIController = Cast<AAIController>(targetCharacter->GetController());
 		return this;
 	};

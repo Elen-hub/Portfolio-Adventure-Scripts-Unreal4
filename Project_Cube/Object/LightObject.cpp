@@ -231,6 +231,11 @@ void ALightObject::DeativateFlickerLight()
 }
 void ALightObject::SwitchOn()
 {
+	if (mPointLight == nullptr)
+		return;
+	if (mPointLight->Intensity > 0.1f)
+		return;
+
 	mPointLight->SetIntensity(mSwitchIntencity);
 	if (mSwitchOnSound)
 	{
@@ -241,6 +246,9 @@ void ALightObject::SwitchOn()
 }
 void ALightObject::SwitchOff()
 {
+	if (mPointLight == nullptr)
+		return;
+
 	mPointLight->SetIntensity(0);
 }
 void ALightObject::Broken()
