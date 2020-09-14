@@ -9,7 +9,7 @@ void Chase_Look::OnStateBegin()
 
 }
 
-void Chase_Look::OnStateStay()
+void Chase_Look::OnStateStay(float deltaTime)
 {
 	FRotator lookAtRot = Lib::GetLookAtRotator(mCharacter->GetActorLocation(), mCharacter->GetTarget()->GetActorLocation(), mCharacter->GetActorUpVector());
 	mCharacter->SetActorRotation(lookAtRot);

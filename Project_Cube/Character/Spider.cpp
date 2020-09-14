@@ -7,6 +7,7 @@
 #include "Project_Cube/StateMachine/Idle_Default.h"
 #include "Project_Cube/StateMachine/Return_Default.h"
 #include "Project_Cube/StateMachine/Attack_Melee.h"
+#include "Project_Cube/StateMachine/Death_Default.h"
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -36,7 +37,7 @@ void ASpider::BeginPlay()
 
 	mLeftWeaponCollision->OnComponentBeginOverlap.AddDynamic(this, &ASpider::OnAttackCollisionEnter);
 	mRightWeaponCollision->OnComponentBeginOverlap.AddDynamic(this, &ASpider::OnAttackCollisionEnter);
-
+	
 	Idle_Default* idleState = new Idle_Default();
 	idleState->Init(this);
 	FunctionToStateMap.Add(ECharacterState::ECS_Idle, idleState);
@@ -49,13 +50,14 @@ void ASpider::BeginPlay()
 	Attack_Melee* attackState = new Attack_Melee();
 	attackState->Init(this);
 	FunctionToStateMap.Add(ECharacterState::ECS_Combat, attackState);
+	Death_Default* deathState = new Death_Default();
+	deathState->Init(this);
+	FunctionToStateMap.Add(ECharacterState::ECS_Death, deathState);
 }
 
 void ASpider::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
-
-
 }
 
 void ASpider::OnAttackCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -69,8 +71,22 @@ void ASpider::OnAttackCollisionEnter(UPrimitiveComponent* OverlappedComponent, A
 			return;
 
 		mAttackList.Add(character);
-		float damageTest = 10.f;
-		character->SetDamage(damageTest);
+		PlaySound(mAttackSound);
+		character->SetDamage(10.f);
+
+		TArray<FHitResult> HitInfo;
+		FCollisionQueryParams queryParams;
+		queryParams.AddIgnoredActor(this);
+		FCollisionObjectQueryParams objectParams = FCollisionObjectQueryParams::AllDynamicObjects;
+		GetWorld()->LineTraceMultiByObjectType(HitInfo, OverlappedComponent->GetComponentLocation(), OtherComp->GetComponentLocation(), objectParams, queryParams);
+		for (FHitResult result : HitInfo)
+		{
+			if (ABaseCharacter* hitActor = Cast<ABaseCharacter>(result.GetActor()))
+			{
+				hitActor->SetHitEffect(result.ImpactPoint, result.ImpactNormal);
+				return;
+			}
+		}
 	}
 }
 
@@ -83,16 +99,16 @@ void ASpider::SetActiveAttackCollision(const ESpiderAttackCollisionType activate
 		mLeftWeaponCollision->SetGenerateOverlapEvents(true);
 		break;
 	case ESpiderAttackCollisionType::Left:
-		mLeftWeaponCollison->SetGenerateOverlapEvents(true);
-		mRightWeaponCollison->SetGenerateOverlapEvents(false);
+		mLeftWeaponCollision->SetGenerateOverlapEvents(true);
+		mRightWeaponCollision->SetGenerateOverlapEvents(false);
 		break;
 	case ESpiderAttackCollisionType::Right:
-		mLeftWeaponCollison->SetGenerateOverlapEvents(false);
-		mRightWeaponCollison->SetGenerateOverlapEvents(true);
+		mLeftWeaponCollision->SetGenerateOverlapEvents(false);
+		mRightWeaponCollision->SetGenerateOverlapEvents(true);
 		break;
 	case ESpiderAttackCollisionType::None:
-		mLeftWeaponCollison->SetGenerateOverlapEvents(false);
-		mRightWeaponCollison->SetGenerateOverlapEvents(false);
+		mLeftWeaponCollision->SetGenerateOverlapEvents(false);
+		mRightWeaponCollision->SetGenerateOverlapEvents(false);
 		break;
 	default:
 		;

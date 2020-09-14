@@ -23,7 +23,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Particle")
 	class UParticleSystem* mOverlapParticle;
-	const float mOverlapParticleScale = 0.25f;
+	const float mOverlapParticleScale = 0.1f;
 	float mDamage;
 	float mHitTime;
 protected:

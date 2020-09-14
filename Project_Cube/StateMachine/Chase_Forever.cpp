@@ -8,7 +8,7 @@ void Chase_Forever::OnStateBegin()
 	mCharacter->GetOverlapCollision()->SetGenerateOverlapEvents(false);
 }
 
-void Chase_Forever::OnStateStay()
+void Chase_Forever::OnStateStay(float deltaTime)
 {
 	float testDistance = 15.f;
 	FAIMoveRequest moveRequest;

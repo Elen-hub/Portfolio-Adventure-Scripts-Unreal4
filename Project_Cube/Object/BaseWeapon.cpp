@@ -23,6 +23,7 @@ ABaseWeapon* ABaseWeapon::Init()
 
 void ABaseWeapon::ActivateCollision(bool isActivate)
 {
+	mbIsEquip = !isActivate;
 	mMesh->SetSimulatePhysics(isActivate);
 	mCollision->SetGenerateOverlapEvents(isActivate);
 }

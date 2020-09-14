@@ -49,7 +49,7 @@ void ABaseHero::BeginPlay()
 	Super::BeginPlay();
 	TSpeed = 300.f;
 	APlayerController* controller = Cast<APlayerController>(GetController());
-	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), -1*GetMesh()->GetComponentRotation());
+	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), GetMesh()->GetComponentRotation());
 
 	FCharacterInformation* info = new FCharacterInformation();
 	FCombatStat* stat = new FCombatStat();

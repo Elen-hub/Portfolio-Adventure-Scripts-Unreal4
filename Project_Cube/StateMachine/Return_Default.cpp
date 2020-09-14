@@ -8,7 +8,7 @@ void Return_Default::OnStateBegin()
 	mCharacter->SetTarget(nullptr);
 }
 
-void Return_Default::OnStateStay()
+void Return_Default::OnStateStay(float deltaTime)
 {
 	FAIMoveRequest moveRequest;
 	moveRequest.SetGoalLocation(mCharacter->TestInitPos);

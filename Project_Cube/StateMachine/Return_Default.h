@@ -13,6 +13,6 @@ class PROJECT_CUBE_API Return_Default : public BaseState
 public:
 	Return_Default() {};
 	virtual void OnStateBegin() override;
-	virtual void OnStateStay() override;
+	virtual void OnStateStay(float DeltaTime) override;
 	virtual void OnStateExit() override;
 };

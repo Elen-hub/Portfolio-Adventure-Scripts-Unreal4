@@ -28,6 +28,7 @@ public:
 	ABaseCharacter();
 	virtual void SetCharacterState(const ECharacterState nextState);
 	virtual void PlaySound(const ECharacterSoundType sound);
+	virtual void PlaySound(class USoundWave* sound);
 	virtual void StopSound();
 
 	virtual void Tick(float DeltaTime) override;
@@ -36,6 +37,7 @@ public:
 	virtual void Jump() { Super::Jump(); };
 	virtual void SetDamage(float damage);
 	virtual void SetHitTime(float hitTime);
+	virtual void SetHitEffect(FVector hitPoint, FVector directionVector);
 	virtual void SetNuckback(FVector direction, float force);
 	virtual void Death();
 
@@ -49,7 +51,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Overlap Collision")
 	class USphereComponent* mOverlapCollision;
 	class UAnimMontage* mAnimationMontage;
-	UPROPERTY(VisibleAnywhere, Category = "State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 	ECharacterState mCharacterState;
 	class UStatFunction* mStatFunction;
 	ABaseCharacter* mTarget;
@@ -61,6 +63,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	class UAudioComponent* mAudioComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hit")
+	UParticleSystem* mHitParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hit")
+	float mHitParticleSize;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	class USoundWave* mIdleSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
@@ -69,9 +77,9 @@ protected:
 	USoundWave* mDeathSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundWave* mHitSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound | Step")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundWave* mMoveSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound | Step")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	float mStepSoundTargetTime;
 
 	TMap<ECharacterSoundType, USoundWave*> mCharacterSoundMap;

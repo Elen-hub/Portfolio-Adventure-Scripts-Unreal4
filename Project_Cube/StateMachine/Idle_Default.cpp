@@ -8,7 +8,7 @@ void Idle_Default::OnStateBegin()
 	mCharacter->GetOverlapCollision()->SetGenerateOverlapEvents(true);
 }
 
-void Idle_Default::OnStateStay()
+void Idle_Default::OnStateStay(float deltaTime)
 {
 
 }

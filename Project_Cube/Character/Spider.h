@@ -33,13 +33,10 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound | Step")
-	float mMoveSoundTargetRange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack | Collision")
 	class UBoxComponent* mLeftWeaponCollision;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack | Collision")
 	class UBoxComponent* mRightWeaponCollision;
-
 	UFUNCTION()
 	void OnAttackCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

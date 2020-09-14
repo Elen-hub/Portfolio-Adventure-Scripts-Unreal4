@@ -13,6 +13,6 @@ class PROJECT_CUBE_API Death_Default : public BaseState
 public:
 	Death_Default() {};
 	virtual void OnStateBegin() override;
-	virtual void OnStateStay() override;
+	virtual void OnStateStay(float DeltaTime) override;
 	virtual void OnStateExit() override;
 };

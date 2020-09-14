@@ -14,13 +14,17 @@ class PROJECT_CUBE_API ABaseWeapon : public AItem
 {
 	GENERATED_BODY()
 	
+
+
 public:
 	ABaseWeapon();
-protected:
-	bool mbIsEquip;
 
+	void ActivateCollision(bool isActivate);
+	void Reload(float magazine);
+	bool IsEquip() { return mbIsEquip; }
 protected:
 	virtual ABaseWeapon* Init();
+
 public:
 	UPROPERTY(EditAnywhere, Category = "Item | Stat")
 	int MaxMagazine;
@@ -39,6 +43,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Item | Stat")
 	float BulletSpread;
 
-	void ActivateCollision(bool isActivate);
-	void Reload(float magazine);
+protected:
+	bool mbIsEquip;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	class USoundWave* mGetSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	USoundWave* mFireSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	USoundWave* mReloadSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	USoundWave* mDropSound;
 };

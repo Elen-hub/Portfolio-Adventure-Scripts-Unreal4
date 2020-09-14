@@ -19,6 +19,8 @@ public:
 	USpawnMng* Init(class UMainGameInstance* gameInstance);
 	template <class T = AActor> T* SpawnActor(UClass* refActor, FVector const& location, FRotator const& rotation);
 	class UParticleSystemComponent* SpawnParticle(class UParticleSystem* particle, FVector const& spawnPos, float const& particleSize = 1.f);
+	UParticleSystemComponent* SpawnParticle(UParticleSystem* particle, FVector const& spawnPos, FRotator const& rotation, float const& particleSize = 1.f);
+
 private:
 	TMap<UClass*, FSpawnActorHandler*> mSpawnedActorMap;
 	TMap<UParticleSystem*, FSpawnParticleHandler*> mSpawnedParticleMap;

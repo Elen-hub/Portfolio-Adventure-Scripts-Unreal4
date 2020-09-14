@@ -71,10 +71,10 @@ enum class ESprintState : uint8
 
 namespace Lib
 {
-	static const FRotator GetLookAtRotator(FVector const& from, FVector const& to, FVector upVector)
+	static const FRotator GetLookAtRotator(FVector const& from, FVector const& to, FVector upVector, bool holdZ = true)
 	{
 		FVector forwardVector = to - from;
-
+		if (holdZ) forwardVector.Z = 0;
 		forwardVector = forwardVector.GetSafeNormal();
 		upVector = upVector - (forwardVector * FVector::DotProduct(upVector, forwardVector));
 		upVector = upVector.GetSafeNormal();

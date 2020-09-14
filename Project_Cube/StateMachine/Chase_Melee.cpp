@@ -9,10 +9,9 @@ void Chase_Melee::OnStateBegin()
 	mStepSoundElapsedTime = 0;
 }
 
-void Chase_Melee::OnStateStay()
+void Chase_Melee::OnStateStay(float deltaTime)
 {
 	float distanceToTarget = FVector::Distance(mCharacter->GetActorLocation(), mCharacter->GetTarget()->GetActorLocation());
-	UE_LOG(LogTemp, Warning, TEXT("%f, %f"), distanceToTarget, mCharacter->TRange);
 	if (distanceToTarget < mCharacter->TRange)
 	{
 		// State Change (Attack)
@@ -27,7 +26,7 @@ void Chase_Melee::OnStateStay()
 	}
 
 	float velocity = mCharacter->GetVelocity().Size();
-	mStepSoundElapsedTime += velocity;
+	mStepSoundElapsedTime += velocity * deltaTime;
 	if (mStepSoundElapsedTime > mCharacter->GetStepSoundTargetTime())
 	{
 		mStepSoundElapsedTime = 0;

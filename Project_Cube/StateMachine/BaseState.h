@@ -25,6 +25,6 @@ public:
 		return this;
 	};
 	virtual void OnStateBegin() {};
-	virtual void OnStateStay() {};
+	virtual void OnStateStay(float deltaTime) {};
 	virtual void OnStateExit() {};
 };

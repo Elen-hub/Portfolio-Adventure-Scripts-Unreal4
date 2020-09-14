@@ -31,7 +31,7 @@ void ABaseMonster::BeginPlay()
 
 	FCharacterInformation* info = new FCharacterInformation();
 	FCombatStat* stat = new FCombatStat();
-	stat->HP = 100.f;
+	stat->HP = 20.f;
 	stat->SP = 100.f;
 
 	mStatFunction->Init(info, stat);
@@ -47,7 +47,7 @@ void ABaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FunctionToStateMap[mCharacterState]->OnStateStay();
+	FunctionToStateMap[mCharacterState]->OnStateStay(DeltaTime);
 }
 void ABaseMonster::SetCharacterState(const ECharacterState nextState)
 {

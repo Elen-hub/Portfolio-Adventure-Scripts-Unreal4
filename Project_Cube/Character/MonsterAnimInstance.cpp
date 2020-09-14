@@ -19,6 +19,9 @@ void UMonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (!mBaseCharacter)
 		return;
 
+	if (mBaseCharacter->GetCharacterState() == ECharacterState::ECS_Death)
+		return;
+
 	mForwardAxis = mBaseCharacter->GetVelocity().Size();
 	mbIsInair = mBaseCharacter->GetMovementComponent()->IsFalling();
 }

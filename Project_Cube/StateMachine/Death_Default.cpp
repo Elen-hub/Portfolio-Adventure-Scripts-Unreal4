@@ -12,7 +12,7 @@ void Death_Default::OnStateBegin()
 	mAIController->MoveToLocation(finaliyRoot);
 }
 
-void Death_Default::OnStateStay()
+void Death_Default::OnStateStay(float deltaTime)
 {
 
 }

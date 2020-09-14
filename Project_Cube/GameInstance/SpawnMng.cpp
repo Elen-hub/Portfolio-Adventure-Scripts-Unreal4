@@ -31,12 +31,34 @@ UParticleSystemComponent* USpawnMng::SpawnParticle(UParticleSystem* particle, FV
     }
     else
     {
-        UParticleSystemComponent* spanwedPraticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->MainCharacter->GetRootComponent(), FName("instance"), spawnPos, FRotator::ZeroRotator, EAttachLocation::KeepWorldPosition, false);
+        spawnedParticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->MainCharacter->GetRootComponent(), FName("instance"), spawnPos, FRotator::ZeroRotator, EAttachLocation::KeepWorldPosition, false);
         // UParticleSystemComponent* spanwedPraticle = UGameplayStatics::SpawnEmitterAtLocation(mGameInstance->GetWorld(), particle, spawnPos, FRotator::ZeroRotator, true);
-        spanwedPraticle->SetWorldScale3D(particleSize * FVector::OneVector);
-        mSpawnedParticleMap[particle]->ParticleArray.Add(spanwedPraticle);
+        spawnedParticle->SetWorldScale3D(particleSize * FVector::OneVector);
+        mSpawnedParticleMap[particle]->ParticleArray.Add(spawnedParticle);
     }
 	return spawnedParticle;
+}
+
+UParticleSystemComponent* USpawnMng::SpawnParticle(class UParticleSystem* particle, FVector const& spawnPos, FRotator const& rotation, float const& particleSize)
+{
+    if (!mSpawnedParticleMap.Contains(particle))
+        mSpawnedParticleMap.Add(particle, new FSpawnParticleHandler());
+
+    UParticleSystemComponent* spawnedParticle = mSpawnedParticleMap[particle]->GetParticle();
+    if (spawnedParticle)
+    {
+        spawnedParticle->SetWorldLocation(spawnPos);
+        spawnedParticle->SetWorldScale3D(particleSize * FVector::OneVector);
+        spawnedParticle->SetWorldRotation(rotation);
+        spawnedParticle->SetActive(true);
+    }
+    else
+    {
+        spawnedParticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->MainCharacter->GetRootComponent(), FName("instance"), spawnPos, rotation, EAttachLocation::KeepWorldPosition, false);
+        spawnedParticle->SetWorldScale3D(particleSize * FVector::OneVector);
+        mSpawnedParticleMap[particle]->ParticleArray.Add(spawnedParticle);
+    }
+    return spawnedParticle;
 }
 
 UParticleSystemComponent* FSpawnParticleHandler::GetParticle()

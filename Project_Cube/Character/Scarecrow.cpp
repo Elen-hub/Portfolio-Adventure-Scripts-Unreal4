@@ -41,7 +41,7 @@ void AScarecrow::Tick(float deltaTime)
 			if(!mAudioComponent->IsPlaying())
 				mAudioComponent->Play();
 
-			FunctionToStateMap[mCharacterState]->OnStateStay();
+			FunctionToStateMap[mCharacterState]->OnStateStay(deltaTime);
 		}
 		else
 		{
@@ -51,7 +51,7 @@ void AScarecrow::Tick(float deltaTime)
 	else
 	{
 		mAudioComponent->Stop();
-		FunctionToStateMap[mCharacterState]->OnStateStay();
+		FunctionToStateMap[mCharacterState]->OnStateStay(deltaTime);
 	}
 }
 

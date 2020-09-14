@@ -74,5 +74,19 @@ void ABullet::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (monster != nullptr)
 	{
 		monster->SetDamage(mDamage);
+
+		TArray<FHitResult> HitInfo;
+		FCollisionQueryParams queryParams;
+		queryParams.AddIgnoredActor(this);
+		FCollisionObjectQueryParams objectParams = FCollisionObjectQueryParams::AllDynamicObjects;
+		GetWorld()->LineTraceMultiByObjectType(HitInfo, OverlappedComponent->GetComponentLocation(), OtherComp->GetComponentLocation(), objectParams, queryParams);
+		for (FHitResult result : HitInfo)
+		{
+			if (ABaseCharacter* hitActor = Cast<ABaseCharacter>(result.GetActor()))
+			{
+				hitActor->SetHitEffect(result.ImpactPoint, result.ImpactNormal);
+				return;
+			}
+		}
 	}
 }

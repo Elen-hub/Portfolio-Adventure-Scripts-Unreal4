@@ -13,6 +13,6 @@ class PROJECT_CUBE_API Chase_Look : public BaseState
 public:
 	Chase_Look() {};
 	virtual void OnStateBegin() override;
-	virtual void OnStateStay() override;
+	virtual void OnStateStay(float DeltaTime) override;
 	virtual void OnStateExit() override;
 };

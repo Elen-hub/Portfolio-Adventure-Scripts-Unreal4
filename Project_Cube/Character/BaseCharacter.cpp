@@ -38,17 +38,18 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->MaxAcceleration = 500.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 50.f;
 
-	mCharacterSoundMap.Add(ECharacterSoundType::Idle, mIdleSound);
-	mCharacterSoundMap.Add(ECharacterSoundType::Move, mMoveSound);
-	mCharacterSoundMap.Add(ECharacterSoundType::Hit, mHitSound);
-	mCharacterSoundMap.Add(ECharacterSoundType::Death, mDeathSound);
-
 	mStepSoundTargetTime = 100.f;
+	mHitParticleSize = 1.f;
 	TInputVector = FVector(0.f);
 }
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	mCharacterSoundMap.Add(ECharacterSoundType::Idle, mIdleSound);
+	mCharacterSoundMap.Add(ECharacterSoundType::Move, mMoveSound);
+	mCharacterSoundMap.Add(ECharacterSoundType::Hit, mHitSound);
+	mCharacterSoundMap.Add(ECharacterSoundType::Death, mDeathSound);
 
 	mAnimInstance = GetMesh()->GetAnimInstance();
 	TestInitPos = GetActorLocation();
@@ -64,7 +65,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 	// 경직시간 갱신
 	if (mbIsHit) mHitElapsedTime += DeltaTime;
 	// 공격시간 갱신
-	if (mAttackElapsedTime >= 0)	mAttackElapsedTime -= DeltaTime;
+	if (mAttackElapsedTime >0)	mAttackElapsedTime -= DeltaTime;
 	// 이동속도 갱신
 	GetCharacterMovement()->MaxWalkSpeed = TSpeed;
 	// mFunctionToStateMap[mCharacterState]->OnStateStay;
@@ -87,6 +88,11 @@ void ABaseCharacter::SetHitTime(float hitTime)
 
 	mHitTargetTime = hitTime;
 	mbIsHit = true;
+}
+
+void ABaseCharacter::SetHitEffect(FVector hitPoint, FVector directionVector)
+{
+	Main->SpawnMng->SpawnParticle(mHitParticle, hitPoint, directionVector.Rotation(), mHitParticleSize);
 }
 
 void ABaseCharacter::SetNuckback(FVector direction, float force)
@@ -116,6 +122,18 @@ void ABaseCharacter::PlaySound(const ECharacterSoundType sound)
 
 	if(mAudioComponent->Sound != mCharacterSoundMap[sound])
 		mAudioComponent->SetSound(mCharacterSoundMap[sound]);
+
+	mAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume());
+	mAudioComponent->Play();
+}
+
+void ABaseCharacter::PlaySound(USoundWave* sound)
+{
+	if (sound == nullptr)
+		return;
+
+	if (mAudioComponent->Sound != sound)
+		mAudioComponent->SetSound(sound);
 
 	mAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume());
 	mAudioComponent->Play();
