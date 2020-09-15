@@ -17,6 +17,8 @@ void Chase_Forever::OnStateStay(float deltaTime)
 
 	FNavPathSharedPtr navPath;
 	mAIController->MoveTo(moveRequest, &navPath);
+	if (mAIController->GetMoveStatus() == EPathFollowingStatus::Idle)
+		mCharacter->Destroy();
 }
 
 void Chase_Forever::OnStateExit()

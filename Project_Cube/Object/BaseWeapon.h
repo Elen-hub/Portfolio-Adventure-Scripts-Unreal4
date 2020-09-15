@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Project_Cube/Object/Bullet.h"
 #include "CoreMinimal.h"
 #include "Item.h"
 #include "BaseWeapon.generated.h"
@@ -20,8 +21,9 @@ public:
 	ABaseWeapon();
 
 	void ActivateCollision(bool isActivate);
-	void Reload(float magazine);
-	bool IsEquip() { return mbIsEquip; }
+	void Fire(FVector muzzleLocation, FVector direction);
+	void PlayReloadSound();
+	void PlayEmptyShotSound();
 protected:
 	virtual ABaseWeapon* Init();
 
@@ -44,8 +46,7 @@ public:
 	float BulletSpread;
 
 protected:
-	bool mbIsEquip;
-
+	UClass* mBulletRefClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
 	class USoundWave* mGetSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
@@ -54,4 +55,6 @@ protected:
 	USoundWave* mReloadSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
 	USoundWave* mDropSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	USoundWave* mEmptyShotSound;
 };

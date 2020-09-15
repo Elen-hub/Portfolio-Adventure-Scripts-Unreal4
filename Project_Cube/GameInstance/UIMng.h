@@ -37,7 +37,7 @@ private:
 	template <class T = UUserWidget> T* InstanceWidget(const EUIType uiType);
 	UBaseWidget* Open(const EUIType uiName);
 public:
-	UUIMng* Init(UGameInstance* gameInstance);
+	UUIMng* Init(class UMainGameInstance* gameInstance);
 	UMainUI_ItemText* GetItemText();
 	template <class T = UBaseWidget> T* Open(const EUIType uiType);
 	template <class T = UBaseWidget> T* Get(const EUIType uiType);

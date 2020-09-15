@@ -37,5 +37,5 @@ protected:
 private:
 	ABaseCharacter* mTargetCharacter;
 	float TMouseAxis;
-
+	bool mbUsingUI;
 };

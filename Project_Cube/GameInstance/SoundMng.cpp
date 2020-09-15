@@ -16,17 +16,17 @@ USoundMng::USoundMng()
 		if (!mSFXMap.Contains((EEventSound)i))
 		{
 			FString soundPath = soundDirecotry + "Event/" + EventSounds[i] + "_Cue." + EventSounds[i] + "_Cue'";
-			static ConstructorHelpers::FObjectFinder<USoundCue> sound(*soundPath);
+			ConstructorHelpers::FObjectFinder<USoundCue> sound(*soundPath);
 			mSFXMap.Add((EEventSound)i, sound.Object);
 		}
 	}
-	FString bgmDirecotry("SoundWave'/Game/Sounds/Music/");
+	FString bgmDirecotry("SoundCue'/Game/Sounds/Music/");
 	for (int i = 1; i < (uint8)EBGM::Max; ++i)
 	{
 		if (!mBGMMap.Contains((EBGM)i))
 		{
 			FString soundPath = bgmDirecotry + BGM[i] + "_Cue." + BGM[i] + "_Cue'";
-			static ConstructorHelpers::FObjectFinder<USoundCue> sound(*soundPath);
+			ConstructorHelpers::FObjectFinder<USoundCue> sound = ConstructorHelpers::FObjectFinder<USoundCue>(*soundPath);
 			mBGMMap.Add((EBGM)i, sound.Object);
 		}
 	}

@@ -61,7 +61,10 @@ AItem* UPlayerCameraFunction::GetItemLookCrosshair()
 		for (FHitResult result : HitInfo)
 		{
 			if (AItem* item = Cast<AItem>(result.GetActor()))
-				return item;
+			{
+				if(!item->IsEquip())
+					return item;
+			}
 		}
 	}
 	return nullptr;
@@ -104,17 +107,23 @@ void UPlayerCameraFunction::TickComponent(float DeltaTime, ELevelTick TickType, 
 			// 아이템이 검출된다면
 			if (AItem* firstResultItem = Cast<AItem>(result.GetActor()))
 			{
-				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultItem, firstResultItem->GetItemSelectText(), EItemTextType::Item);
-				return;
+				if (!firstResultItem->IsEquip())
+				{
+					mbUsingUI = true;
+					mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultItem, firstResultItem->GetItemSelectText(), EItemTextType::Item);
+					return;
+				}
 			}
 			if (AInteractionObject* firstResultObject = Cast<AInteractionObject>(result.GetActor()))
 			{
+				mbUsingUI = true;
 				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultObject, firstResultObject->GetInteractionExplanation(), EItemTextType::Interaction);
 				return;
 			}
 		}
 	}
-	mMainGameInstance->UIMng->GetItemText()->Disabled();
+	if(mbUsingUI)
+		mMainGameInstance->UIMng->GetItemText()->Disabled();
 }
 
 void UPlayerCameraFunction::CameraMoveSide(float axis)

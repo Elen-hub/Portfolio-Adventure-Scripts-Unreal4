@@ -25,8 +25,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	class ABaseWeapon* mWeapon;
 
-	UClass* mBulletRefClass;
-
 	UPROPERTY(BlueprintReadOnly)
 	bool mbIsFire;
 	float mAutoFireDelay;
@@ -39,6 +37,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool mbIsReloading;
 	float mReloadTargetTime;
+private:
+	float mStepSoundElapsedTime;
 protected:
 	virtual void BeginPlay() override;
 

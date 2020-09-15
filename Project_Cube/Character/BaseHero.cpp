@@ -10,7 +10,6 @@
 #include "Project_Cube/GameInstance/MainGameInstance.h"
 #include "Components/SphereComponent.h"
 #include "Project_Cube/Object/BaseWeapon.h"
-#include "Project_Cube/Object/Bullet.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Project_Cube/Object/InteractionObject.h"
 
@@ -21,9 +20,6 @@
 ABaseHero::ABaseHero()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	FStringClassReference classRef("Blueprint'/Game/TestContent/Bullet_BP.Bullet_BP_C'");
-	mBulletRefClass = classRef.TryLoadClass<AActor>();
 
 	USpringArmComponent* springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
 	springArm->SetupAttachment(GetRootComponent());
@@ -47,9 +43,10 @@ ABaseHero::ABaseHero()
 void ABaseHero::BeginPlay()
 {
 	Super::BeginPlay();
+
 	TSpeed = 300.f;
 	APlayerController* controller = Cast<APlayerController>(GetController());
-	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), GetMesh()->GetComponentRotation());
+	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), GetActorRotation());
 
 	FCharacterInformation* info = new FCharacterInformation();
 	FCombatStat* stat = new FCombatStat();
@@ -60,7 +57,6 @@ void ABaseHero::BeginPlay()
 
 	UMainGameInstance* mainGameInstance = GetGameInstance<UMainGameInstance>();
 	mainGameInstance->MainCharacter = this;
-	mainGameInstance->UIMng->Open<UMainUI>(EUIType::MainUI)->Enabled(this);
 
 	mPlayerCamera->Set(this, mainGameInstance);
 }
@@ -70,7 +66,13 @@ void ABaseHero::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
-
+	float velocity = GetVelocity().Size();
+	mStepSoundElapsedTime += velocity * DeltaTime;
+	if (mStepSoundElapsedTime > mStepSoundTargetTime)
+	{
+		mStepSoundElapsedTime = 0;
+		PlaySound(ECharacterSoundType::Move);
+	}
 	if (TInputVector.X > 0)
 	{
 		// 정면이동
@@ -268,22 +270,22 @@ void ABaseHero::Fire()
 	if (mWeapon->CurrMagazine <= 0)
 	{
 		// 총알이 없을경우
-		mbIsFire = false;
+		mWeapon->PlayEmptyShotSound();
 		return;
 	}
-	// 총알발사
-	ABullet* bullet = GetGameInstance<UMainGameInstance>()->SpawnMng->SpawnActor<ABullet>(mBulletRefClass);
 
+	// 탄착군 연산
 	FVector velocity = GetVelocity();
-	if(GetMovementComponent()->IsFalling())
+	if (GetMovementComponent()->IsFalling())
 		velocity *= 0.0003f;
 	else
 		velocity *= 0.00015f;
 	float size = velocity.Size();
 	velocity.X = FMath::RandRange(-size, size);
 	velocity.Z = FMath::RandRange(-size, size);
-	bullet->Enabled(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot() + velocity, 0, 10, 0.1f);
-	mWeapon->CurrMagazine -= 1;
+
+	// 총알발사
+	mWeapon->Fire(mPlayerCamera->GetMuzzlePos(), mPlayerCamera->GetMuzzleRot() + velocity);
 
 	// 딜레이적용
 	mAutoFireDelay = mWeapon->FullAutoSpeed;
@@ -316,6 +318,7 @@ void ABaseHero::Reload()
 
 	mbIsReloading = true;
 	mReloadTargetTime = mWeapon->ReloadSpeed;
+	mWeapon->PlayReloadSound();
 
 	// 애니메이션 몽타주 설정
 	mAnimInstance->Montage_Play(mCombatMontage, 1.0f);

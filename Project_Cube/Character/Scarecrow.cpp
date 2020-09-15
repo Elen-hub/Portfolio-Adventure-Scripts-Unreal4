@@ -36,7 +36,6 @@ void AScarecrow::Tick(float deltaTime)
 	{
 		if (!Lib::IsPrimitiveComponentRenderedRecently(GetMesh(), 0.2f))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Com"));
 			mAudioComponent->VolumeMultiplier = Main->SoundMng->GetSFXVolume();
 			if(!mAudioComponent->IsPlaying())
 				mAudioComponent->Play();

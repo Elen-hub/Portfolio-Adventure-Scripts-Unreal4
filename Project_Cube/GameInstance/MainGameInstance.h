@@ -25,6 +25,8 @@ public:
 	class USpawnMng* SpawnMng;
 	UPROPERTY()
 	class USoundMng* SoundMng;
+	UPROPERTY()
+	class UMapMng* MapMng;
 
 	virtual void Init() override;
 };

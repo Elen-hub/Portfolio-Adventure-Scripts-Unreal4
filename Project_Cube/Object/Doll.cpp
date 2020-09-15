@@ -66,10 +66,9 @@ void ADoll::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AActor* O
 	if (!Cast<ABaseHero>(OtherActor))
 		return;
 	
-	mAudioComponent->StopDelayed(mDelayTime-0.5f);
+	mAudioComponent->Stop();
 	Main->SoundMng->PlayEventSound(this, EEventSound::SurpriseLow);
-
-	SetDelayTimer(mLightlamp, &ALightObject::SwitchOn);
+	mLightlamp->SwitchOn();
 }
 
 void ADoll::OnCollisionExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

@@ -256,9 +256,6 @@ void ALightObject::Broken()
 	if (mPointLight == nullptr)
 		return;
 
-	if (mBrokenSound)
-		mAudioComponent->SetSound(mBrokenSound);
-	
 	mbUseBrokenOverlap = false;
 	DeativateFlickerLight();
 	mPointLight->DestroyComponent();
@@ -266,5 +263,6 @@ void ALightObject::Broken()
 	{
 		mAudioComponent->SetVolumeMultiplier(1);
 		mAudioComponent->SetSound(mBrokenSound);
+		mAudioComponent->Play();
 	}
 }

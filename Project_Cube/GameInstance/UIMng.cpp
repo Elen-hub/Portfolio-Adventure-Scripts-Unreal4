@@ -7,6 +7,9 @@
 #include "Project_Cube/UI/BaseWidget.h"
 #include "Project_Cube/UI/MainUI_ItemText.h"
 
+#include "MainGameInstance.h"
+#include "Project_Cube/UI/MainUI.h"
+
 UUIMng::UUIMng()
 {
 	// UI 디렉토리
@@ -23,9 +26,11 @@ UUIMng::UUIMng()
 		}
 	}
 }
-UUIMng* UUIMng::Init(UGameInstance* gameInstance)
+UUIMng* UUIMng::Init(UMainGameInstance* gameInstance)
 {
 	mGameInstance = gameInstance;
+
+	Open<UMainUI>(EUIType::MainUI)->Enabled(gameInstance->MainCharacter);
 	return this;
 }
 UBaseWidget* UUIMng::Open(const EUIType uiType)
@@ -33,13 +38,12 @@ UBaseWidget* UUIMng::Open(const EUIType uiType)
 	if (!mUIMap.Contains(uiType))
 		InstanceBaseWidget(uiType);
 
+	SetVisibility(ESlateVisibility::Visible);
 	mUIMap[uiType]->Open();
-	mUIMap[uiType]->SetVisibility(ESlateVisibility::Visible);
 	return mUIMap[uiType];
 }
 void UUIMng::Close(EUIType uiType)
 {
-	mUIMap[uiType]->SetVisibility(ESlateVisibility::Hidden);
 	mUIMap[uiType]->Close();
 }
 

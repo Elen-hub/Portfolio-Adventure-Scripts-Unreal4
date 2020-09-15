@@ -9,19 +9,24 @@
 #include "MainUI_Crosshair.h"
 #include "MainUI_ItemText.h"
 #include "MainUI_WeaponStatus.h"
+#include "Components/Image.h"
 
 
 void UMainUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 	mCharacterStatus = WidgetTree->FindWidget<UMainUI_CharacterStatus>(TEXT("MainUI_CharacterStatus_BP"));
 	mWeaponStatus = WidgetTree->FindWidget<UMainUI_WeaponStatus>(TEXT("MainUI_WeaponStatus_BP"));
 	mCrosshair = WidgetTree->FindWidget<UMainUI_Crosshair>(TEXT("MainUI_Crosshair_BP"));
+
+	mShowImage = WidgetTree->FindWidget<UImage>(TEXT("ShowTexture"));
 }
 UBaseWidget* UMainUI::Init()
 {
 	Super::Init();
-
+	mShowImage->SetVisibility(ESlateVisibility::Hidden);
+	mCharacterStatus->SetVisibility(ESlateVisibility::Hidden);
 	return this;
 }
 void UMainUI::Enabled(ABaseHero* baseHero)
@@ -50,4 +55,16 @@ void UMainUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	mCharacterStatus->Tick(InDeltaTime);
 	mWeaponStatus->Tick(InDeltaTime);
 	mCrosshair->Tick(InDeltaTime);
+}
+
+void UMainUI::ActivateTexture(bool isActivate)
+{
+	if (isActivate)
+	{
+		mShowImage->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		mShowImage->SetVisibility(ESlateVisibility::Hidden);
+	}
 }

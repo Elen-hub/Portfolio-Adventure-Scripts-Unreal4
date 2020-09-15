@@ -7,6 +7,7 @@
 #include "UIMng.h"
 #include "SpawnMng.h"
 #include "SoundMng.h"
+#include "MapMng.h"
 
 
 void UMainGameInstance::Init()
@@ -17,6 +18,7 @@ void UMainGameInstance::Init()
 	UIMng = NewObject<UUIMng>()->Init(this);
 	SpawnMng = NewObject<USpawnMng>()->Init(this);
 	SoundMng = NewObject<USoundMng>()->Init();
+	MapMng = NewObject<UMapMng>()->Init();
 
 	Main = this;
 }

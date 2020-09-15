@@ -30,4 +30,5 @@ public:
 	FORCEINLINE EItemType GetWeaponType() { return mItemType; }
 	virtual FText GetItemSelectText();
 	EItemType GetItemType() { return mItemType; }
+	bool IsEquip() { return !mCollision->GetGenerateOverlapEvents(); }
 };

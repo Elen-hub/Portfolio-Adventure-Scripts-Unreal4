@@ -105,6 +105,8 @@ void ABaseCharacter::Death()
 	mTarget = nullptr;
 	GetMesh()->SetGenerateOverlapEvents(false);
 	mOverlapCollision->SetGenerateOverlapEvents(false);
+
+	PlaySound(ECharacterSoundType::Death);
 }
 void ABaseCharacter::WalkStart()
 {

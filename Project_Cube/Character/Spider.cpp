@@ -11,6 +11,7 @@
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "BaseHero.h"
 
 ASpider::ASpider()
 {
@@ -81,7 +82,7 @@ void ASpider::OnAttackCollisionEnter(UPrimitiveComponent* OverlappedComponent, A
 		GetWorld()->LineTraceMultiByObjectType(HitInfo, OverlappedComponent->GetComponentLocation(), OtherComp->GetComponentLocation(), objectParams, queryParams);
 		for (FHitResult result : HitInfo)
 		{
-			if (ABaseCharacter* hitActor = Cast<ABaseCharacter>(result.GetActor()))
+			if (ABaseHero* hitActor = Cast<ABaseHero>(result.GetActor()))
 			{
 				hitActor->SetHitEffect(result.ImpactPoint, result.ImpactNormal);
 				return;

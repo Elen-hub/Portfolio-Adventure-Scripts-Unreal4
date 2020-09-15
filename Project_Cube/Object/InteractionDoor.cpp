@@ -46,14 +46,14 @@ FText const AInteractionDoor::GetInteractionExplanation()
 
 	if (mIsOpen)
 	{
-		returnText = FText::FromString("문 닫기");
+		returnText = FText::FromString("Close door");
 	}
 	else
 	{
 		if (mIsLocked)
-			returnText = FText::FromString("[잠겨있는 문] 열쇠 사용하기.");
+			returnText = FText::FromString("[Locked] Use Key");
 		else
-			returnText = FText::FromString("문 열기");
+			returnText = FText::FromString("Open the door");
 	}
 
 	return returnText;

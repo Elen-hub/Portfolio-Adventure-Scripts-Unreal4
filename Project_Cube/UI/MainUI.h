@@ -22,6 +22,8 @@ private:
 	UPROPERTY()
 	class UMainUI_Crosshair* mCrosshair;
 	UPROPERTY()
+	class UImage* mShowImage;
+	UPROPERTY()
 	class ABaseHero* mBaseHero;
 
 protected:
@@ -30,6 +32,6 @@ protected:
 public:
 	void Enabled(ABaseHero* baseHero);
 	void Disabled();
-
+	void ActivateTexture(bool isActivate);
 	virtual UBaseWidget* Init() override;
 };
