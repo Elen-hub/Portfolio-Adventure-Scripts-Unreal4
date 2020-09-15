@@ -33,5 +33,6 @@ public:
 	void Enabled(ABaseHero* baseHero);
 	void Disabled();
 	void ActivateTexture(bool isActivate);
+	void SetTexture(class UTexture2D* image);
 	virtual UBaseWidget* Init() override;
 };

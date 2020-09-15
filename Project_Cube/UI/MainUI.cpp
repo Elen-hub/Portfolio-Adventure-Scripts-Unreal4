@@ -67,3 +67,8 @@ void UMainUI::ActivateTexture(bool isActivate)
 		mShowImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
+
+void UMainUI::SetTexture(UTexture2D* texture)
+{
+	mShowImage->SetBrushFromTexture(texture);
+}
