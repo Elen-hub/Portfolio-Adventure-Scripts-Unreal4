@@ -29,16 +29,14 @@ UUIMng::UUIMng()
 UUIMng* UUIMng::Init(UMainGameInstance* gameInstance)
 {
 	mGameInstance = gameInstance;
-
-	Open<UMainUI>(EUIType::MainUI)->Enabled(gameInstance->MainCharacter);
 	return this;
 }
 UBaseWidget* UUIMng::Open(const EUIType uiType)
 {
-	if (!mUIMap.Contains(uiType))
-		InstanceBaseWidget(uiType);
+	//if (!mUIMap.Contains(uiType))
+	//	InstanceBaseWidget(uiType);
 
-	SetVisibility(ESlateVisibility::Visible);
+	InstanceBaseWidget(uiType);
 	mUIMap[uiType]->Open();
 	return mUIMap[uiType];
 }

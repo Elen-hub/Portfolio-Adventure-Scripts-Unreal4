@@ -31,7 +31,7 @@ UParticleSystemComponent* USpawnMng::SpawnParticle(UParticleSystem* particle, FV
     }
     else
     {
-        spawnedParticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->MainCharacter->GetRootComponent(), FName("instance"), spawnPos, FRotator::ZeroRotator, EAttachLocation::KeepWorldPosition, false);
+        spawnedParticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->GetMainCharacter()->GetRootComponent(), FName("instance"), spawnPos, FRotator::ZeroRotator, EAttachLocation::KeepWorldPosition, false);
         // UParticleSystemComponent* spanwedPraticle = UGameplayStatics::SpawnEmitterAtLocation(mGameInstance->GetWorld(), particle, spawnPos, FRotator::ZeroRotator, true);
         spawnedParticle->SetWorldScale3D(particleSize * FVector::OneVector);
         mSpawnedParticleMap[particle]->ParticleArray.Add(spawnedParticle);
@@ -54,7 +54,7 @@ UParticleSystemComponent* USpawnMng::SpawnParticle(class UParticleSystem* partic
     }
     else
     {
-        spawnedParticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->MainCharacter->GetRootComponent(), FName("instance"), spawnPos, rotation, EAttachLocation::KeepWorldPosition, false);
+        spawnedParticle = UGameplayStatics::SpawnEmitterAttached(particle, mGameInstance->GetMainCharacter()->GetRootComponent(), FName("instance"), spawnPos, rotation, EAttachLocation::KeepWorldPosition, false);
         spawnedParticle->SetWorldScale3D(particleSize * FVector::OneVector);
         mSpawnedParticleMap[particle]->ParticleArray.Add(spawnedParticle);
     }

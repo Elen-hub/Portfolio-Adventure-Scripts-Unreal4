@@ -26,7 +26,6 @@ UBaseWidget* UMainUI::Init()
 {
 	Super::Init();
 	mShowImage->SetVisibility(ESlateVisibility::Hidden);
-	mCharacterStatus->SetVisibility(ESlateVisibility::Hidden);
 	return this;
 }
 void UMainUI::Enabled(ABaseHero* baseHero)

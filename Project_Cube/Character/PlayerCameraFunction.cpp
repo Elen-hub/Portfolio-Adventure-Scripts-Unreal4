@@ -24,10 +24,9 @@ UPlayerCameraFunction* UPlayerCameraFunction::Init(USpringArmComponent* springAr
 	return this;
 }
 
-void UPlayerCameraFunction::Set(ABaseCharacter* character , UMainGameInstance* gameInstance)
+void UPlayerCameraFunction::Set(ABaseCharacter* character)
 {
 	mTargetCharacter = character;
-	mMainGameInstance = gameInstance;
 }
 
 void UPlayerCameraFunction::SetRebound(const float pitch, const float yaw)
@@ -110,20 +109,20 @@ void UPlayerCameraFunction::TickComponent(float DeltaTime, ELevelTick TickType, 
 				if (!firstResultItem->IsEquip())
 				{
 					mbUsingUI = true;
-					mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultItem, firstResultItem->GetItemSelectText(), EItemTextType::Item);
+					Main->UIMng->GetItemText()->Enabled(firstResultItem, firstResultItem->GetItemSelectText(), EItemTextType::Item);
 					return;
 				}
 			}
 			if (AInteractionObject* firstResultObject = Cast<AInteractionObject>(result.GetActor()))
 			{
 				mbUsingUI = true;
-				mMainGameInstance->UIMng->GetItemText()->Enabled(firstResultObject, firstResultObject->GetInteractionExplanation(), EItemTextType::Interaction);
+				Main->UIMng->GetItemText()->Enabled(firstResultObject, firstResultObject->GetInteractionExplanation(), EItemTextType::Interaction);
 				return;
 			}
 		}
 	}
 	if(mbUsingUI)
-		mMainGameInstance->UIMng->GetItemText()->Disabled();
+		Main->UIMng->GetItemText()->Disabled();
 }
 
 void UPlayerCameraFunction::CameraMoveSide(float axis)

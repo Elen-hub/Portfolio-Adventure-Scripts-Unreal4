@@ -3,16 +3,19 @@
 
 #include "Project_Cube/User.h"
 #include "MainGameInstance.h"
-#include "CharacterMng.h"
-#include "UIMng.h"
-#include "SpawnMng.h"
-#include "SoundMng.h"
-#include "MapMng.h"
+
+#include "Project_Cube/UI/MainUI.h"
 
 
 void UMainGameInstance::Init()
 {
 	Super::Init();
+	Main = this;
+}
+
+void UMainGameInstance::SetMainCharacter(ABaseHero* mainCharacter) 
+{
+	mMainCharacter = mainCharacter;
 
 	CharacterMng = NewObject<UCharacterMng>()->Init();
 	UIMng = NewObject<UUIMng>()->Init(this);
@@ -20,5 +23,5 @@ void UMainGameInstance::Init()
 	SoundMng = NewObject<USoundMng>()->Init();
 	MapMng = NewObject<UMapMng>()->Init();
 
-	Main = this;
+	UIMng->Open<UMainUI>(EUIType::MainUI)->Enabled(mainCharacter);
 }

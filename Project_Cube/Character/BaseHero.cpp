@@ -54,16 +54,15 @@ void ABaseHero::BeginPlay()
 	stat->SP = 100.f;
 
 	mStatFunction->Init(info, stat);
-
-	UMainGameInstance* mainGameInstance = GetGameInstance<UMainGameInstance>();
-	mainGameInstance->MainCharacter = this;
-
-	mPlayerCamera->Set(this, mainGameInstance);
+	Main->SetMainCharacter(this);
+	mPlayerCamera->Set(this);
 }
 
 void ABaseHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	UE_LOG(LogTemp, Warning, TEXT("Rotation %f, %f, %f"), GetActorRotation().Pitch, GetActorRotation().Roll, GetActorRotation().Yaw);
 
 	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
 	float velocity = GetVelocity().Size();

@@ -36,43 +36,51 @@ void AHandEvent::Tick(float deltaTime)
 			mLightObjects.Remove(obj);
 		}
 	}
-
+	if (mTickElapsedTime > 8)
+	{
+		if (!mbSound)
+		{
+			mbSound = true;
+			// 사운드재생
+		}
+	}
 	if (mTickElapsedTime > 10)
 	{
-		mHandleInstanceElapsedTime += deltaTime;
-		if (mHandleInstanceTargetTime < mHandleInstanceElapsedTime)
+		float x = 0.f, y = 0.f, z = 0.f;
+		FRotator rot = FRotator::ZeroRotator;
+		switch (FMath::RandRange(0, 2))
 		{
-			mAudioComponent->Play();
-			mHandleInstanceElapsedTime = 0;
-
-			float x = 0.f, y = 0.f, z = 0.f;
-			FVector rot = FVector::ZeroVector;
-			switch (FMath::RandRange(0, 2))
-			{
-			case 0:
-				x = FMath::RandRange(-870, 770);
-				y = -170.f;
-				z = FMath::RandRange(-20, 180);
-				rot = FVector(FMath::RandRange(0, 360), 0, 270);
-				break;
-			case 1:
-				x = FMath::RandRange(-870, 770);
-				y = 100.f;
-				z = FMath::RandRange(-20, 180);
-				rot = FVector(FMath::RandRange(0, 360), 0, 90);
-				break;
-			case 2:
-				x = FMath::RandRange(-880, 780);
-				y = FMath::RandRange(-140, 110);
-				z = -50.f;
-				rot = FVector(FMath::RandRange(0, 360), -90, 0);
-				break;
-			}
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Template = mDecalActors;
-			ADecalActor* decal = GetWorld()->SpawnActor <ADecalActor>(mDecalActors->GetClass(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-			decal->SetActorLocationAndRotation(FVector(x, y, z), rot.Rotation());
-			// decal->GetDecal()->Si
+		case 0:
+			x = FMath::RandRange(-870, 770);
+			y = -170.f;
+			z = FMath::RandRange(-20, 180);
+			rot = FRotator(0, 270, FMath::RandRange(0, 360));
+			break;
+		case 1:
+			x = FMath::RandRange(-870, 770);
+			y = 100.f;
+			z = FMath::RandRange(-20, 180);
+			rot = FRotator(0, 90, FMath::RandRange(0, 360));
+			break;
+		case 2:
+			x = FMath::RandRange(-880, 780);
+			y = FMath::RandRange(-140, 110);
+			z = -50.f;
+			rot = FRotator(-90, 0, FMath::RandRange(0, 360));
+			break;
+		}
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Template = mDecalActors;
+		ADecalActor* decal = GetWorld()->SpawnActor <ADecalActor>(mDecalActors->GetClass(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+		decal->SetActorLocationAndRotation(FVector(x, y, z), rot);
+		decal->SetActorScale3D(FVector::OneVector * FMath::RandRange(0.8f, 1.2f));
+	}
+	if (mTickElapsedTime > 15.f)
+	{
+		if (!mbSpawn)
+		{
+			mbSpawn = true;
+			// spawn
 		}
 	}
 }
@@ -82,7 +90,6 @@ void AHandEvent::OnCollisionEnter(UPrimitiveComponent* OverlappedComponent, AAct
 	if (!Cast<ABaseHero>(OtherActor))
 		return;
 
-	mAudioComponent->SetSound(mSound);
 	mbStart = true;
 	mCollision->SetGenerateOverlapEvents(false);
 }

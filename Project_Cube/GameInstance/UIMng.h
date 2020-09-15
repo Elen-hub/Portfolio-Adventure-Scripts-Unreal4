@@ -47,6 +47,8 @@ public:
 template<class T>
 T* UUIMng::InstanceBaseWidget(const EUIType uiType)
 {
+	if (mUIMap.Contains(uiType))
+		mUIMap.Remove(uiType);
 	// 참조된 클래스로 오브젝트 인스턴싱
 	T* instanceWidget = CreateWidget<T>(mGameInstance->GetWorld(), mWidgetClassMap[uiType]);
 	mUIMap.Add(uiType, instanceWidget);

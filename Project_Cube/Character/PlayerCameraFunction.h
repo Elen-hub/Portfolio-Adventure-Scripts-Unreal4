@@ -16,7 +16,7 @@ public:
 	UPlayerCameraFunction();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UPlayerCameraFunction* Init(class USpringArmComponent* springArm, class UCameraComponent* camera);
-	void Set(class ABaseCharacter* character, class UMainGameInstance* gameInstance);
+	void Set(class ABaseCharacter* character);
 	void SetRebound(const float pitch, const float yaw);
 	void CameraMoveSide(float axis);
 	void CameraMoveUp(float axis);
@@ -32,8 +32,6 @@ protected:
 	UCameraComponent* mCamera;
 	UPROPERTY(EditAnywhere, Category = "SpringArm")
 	USpringArmComponent* mCameraSpringArm;
-	UPROPERTY()
-	UMainGameInstance* mMainGameInstance;
 private:
 	ABaseCharacter* mTargetCharacter;
 	float TMouseAxis;

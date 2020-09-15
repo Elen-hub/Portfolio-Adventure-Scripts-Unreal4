@@ -25,11 +25,9 @@ protected:
 	class ADecalActor* mDecalActors;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event")
 	TArray<class ALightObject*> mLightObjects;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event")
-	class USoundWave* mSound;
 private:
 	bool mbStart;
+	bool mbSpawn;
+	bool mbSound;
 	float mTickElapsedTime;
-	float mHandleInstanceTargetTime = 0.15f;
-	float mHandleInstanceElapsedTime;
 };

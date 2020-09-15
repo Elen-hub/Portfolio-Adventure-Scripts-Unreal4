@@ -15,8 +15,9 @@ class PROJECT_CUBE_API UMainGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	UPROPERTY()
-	class ABaseHero* MainCharacter;
+	class ABaseHero* GetMainCharacter() { return mMainCharacter; }
+	void SetMainCharacter(ABaseHero* mainCharacter);
+
 	UPROPERTY()
 	class UCharacterMng* CharacterMng;
 	UPROPERTY()
@@ -29,4 +30,8 @@ public:
 	class UMapMng* MapMng;
 
 	virtual void Init() override;
+
+private:	
+	UPROPERTY()
+	ABaseHero* mMainCharacter;
 };
