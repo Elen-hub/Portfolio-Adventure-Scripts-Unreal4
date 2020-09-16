@@ -36,15 +36,15 @@ void AHandEvent::Tick(float deltaTime)
 			mLightObjects.Remove(obj);
 		}
 	}
-	if (mTickElapsedTime > 8)
+	if (mTickElapsedTime > 9)
 	{
 		if (!mbSound)
 		{
 			mbSound = true;
-			// 사운드재생
+			Main->SoundMng->PlayEventSound(this, EEventSound::WoodCreak);
 		}
 	}
-	if (mTickElapsedTime > 10)
+	if (mTickElapsedTime > 10  && mTickElapsedTime < 12)
 	{
 		float x = 0.f, y = 0.f, z = 0.f;
 		FRotator rot = FRotator::ZeroRotator;

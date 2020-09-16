@@ -10,7 +10,8 @@
 
 AZombieGirl::AZombieGirl()
 {
-	mStepAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("StepAudio"));
+	mAgroAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AgroAudio"));
+	mAgroAudioComponent->SetupAttachment(GetRootComponent());
 	mAgroRange = 0.f;
 }
 
@@ -34,10 +35,10 @@ void AZombieGirl::Tick(float deltaTime)
 
 	if (mCharacterState == ECharacterState::ECS_Idle)
 	{
-		if(!mAudioComponent->IsPlaying())
+		if(!mAgroAudioComponent->IsPlaying())
 		{
-			mAudioComponent->SetSound(mCrySound);
-			mAudioComponent->Play();
+			mAgroAudioComponent->SetSound(mCrySound);
+			mAgroAudioComponent->Play();
 		}
 		// 어그로증감
 		if (mTarget != nullptr)
@@ -47,13 +48,13 @@ void AZombieGirl::Tick(float deltaTime)
 
 			if (mAgroRange <= 0.6f && mAudioComponent->Sound != mCrySound)
 			{
-				mAudioComponent->SetSound(mCrySound);
-				mAudioComponent->Play();
+				mAgroAudioComponent->SetSound(mCrySound);
+				mAgroAudioComponent->Play();
 			}
 			if (mAgroRange > 0.6f && mAudioComponent->Sound != mAgroSound)
 			{
-				mAudioComponent->SetSound(mAgroSound);
-				mAudioComponent->Play();
+				mAgroAudioComponent->SetSound(mAgroSound);
+				mAgroAudioComponent->Play();
 			}
 			if(mAudioComponent->Sound == mCrySound)
 				mAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume() * (1-mAgroRange));
@@ -64,24 +65,10 @@ void AZombieGirl::Tick(float deltaTime)
 		}
 		if (mAgroRange >= 1)
 		{
-			mStepElapsedRange = 0;
-			mAudioComponent->SetSound(mChaseStartSound);
-			mAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume());
-			mAudioComponent->Play();
+			mAgroAudioComponent->SetSound(mChaseStartSound);
+			mAgroAudioComponent->SetVolumeMultiplier(Main->SoundMng->GetSFXVolume());
+			mAgroAudioComponent->Play();
 			SetCharacterState(ECharacterState::ECS_Chase);
-		}
-	}
-	if (mCharacterState == ECharacterState::ECS_Chase)
-	{
-		mStepElapsedRange += deltaTime * GetVelocity().Size();
-		if (mStepTargetRange < mStepElapsedRange)
-		{
-			mStepElapsedRange = 0;
-			if (mStepSound)
-			{
-				mStepAudioComponent->SetSound(mStepSound);
-				mStepAudioComponent->Play();
-			}
 		}
 	}
 }

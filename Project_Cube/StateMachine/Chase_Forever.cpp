@@ -10,6 +10,14 @@ void Chase_Forever::OnStateBegin()
 
 void Chase_Forever::OnStateStay(float deltaTime)
 {
+	float velocity = mCharacter->GetVelocity().Size();
+	mStepSoundElapsedTime += velocity * deltaTime;
+	if (mStepSoundElapsedTime > mCharacter->GetStepSoundTargetTime())
+	{
+		mStepSoundElapsedTime = 0;
+		mCharacter->PlaySound(ECharacterSoundType::Move);
+	}
+
 	float testDistance = 15.f;
 	FAIMoveRequest moveRequest;
 	moveRequest.SetGoalActor(mCharacter->GetTarget());

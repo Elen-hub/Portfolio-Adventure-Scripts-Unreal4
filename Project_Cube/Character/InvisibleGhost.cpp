@@ -33,8 +33,6 @@ void AInvisibleGhost::BeginPlay()
 	Chase_Forever* chaseState = new Chase_Forever();
 	chaseState->Init(this);
 	FunctionToStateMap.Add(ECharacterState::ECS_Chase, chaseState);
-
-	mSoundElapsedRange = 0;
 }
 
 void AInvisibleGhost::OnBrokenEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -42,24 +40,5 @@ void AInvisibleGhost::OnBrokenEvent(UPrimitiveComponent* OverlappedComponent, AA
 	if (ALightObject* light = Cast<ALightObject>(OtherActor))
 	{
 		light->Broken();
-	}
-}
-
-void AInvisibleGhost::Tick(float deltaTime)
-{
-	Super::Tick(deltaTime);
-
-	if (mCharacterState == ECharacterState::ECS_Chase)
-	{
-		mSoundElapsedRange += deltaTime * GetVelocity().Size();
-		if (mSoundTargetRange < mSoundElapsedRange)
-		{
-			mSoundElapsedRange = 0;
-			if (mStepSound)
-			{
-				mAudioComponent->SetSound(mStepSound);
-				mAudioComponent->Play();
-			}
-		}
 	}
 }

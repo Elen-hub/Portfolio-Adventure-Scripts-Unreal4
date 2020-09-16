@@ -27,14 +27,9 @@ protected:
 	class USoundWave* mAgroSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	class USoundWave* mChaseStartSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class UAudioComponent* mAgroAudioComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
-	class UAudioComponent* mStepAudioComponent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
-	class USoundWave* mStepSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
-	float mStepTargetRange;
 private:
 	float mAgroRange;
-	float mStepElapsedRange;
 };

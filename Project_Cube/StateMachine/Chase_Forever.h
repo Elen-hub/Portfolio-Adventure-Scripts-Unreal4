@@ -15,4 +15,6 @@ public:
 	virtual void OnStateBegin() override;
 	virtual void OnStateStay(float DeltaTime) override;
 	virtual void OnStateExit() override;
+
+	float mStepSoundElapsedTime;
 };

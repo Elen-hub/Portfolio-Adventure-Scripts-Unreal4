@@ -16,7 +16,6 @@ class PROJECT_CUBE_API AInvisibleGhost : public ABaseMonster
 
 public:
 	AInvisibleGhost();
-	virtual void Tick(float deltaTime) override;
 protected:
 	virtual void BeginPlay() override;
 	UFUNCTION()
@@ -24,11 +23,4 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Event")
 	class USphereComponent* mBrokenLampOverlap;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
-	class USoundWave* mStepSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walk")
-	float mSoundTargetRange;
-
-private:
-	float mSoundElapsedRange;
 };

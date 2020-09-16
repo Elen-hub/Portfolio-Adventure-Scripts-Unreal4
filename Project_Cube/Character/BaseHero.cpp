@@ -46,7 +46,7 @@ void ABaseHero::BeginPlay()
 
 	TSpeed = 300.f;
 	APlayerController* controller = Cast<APlayerController>(GetController());
-	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), GetActorRotation());
+	controller->SetAudioListenerOverride(GetMesh(), FVector(0, 0, 50.f), GetActorRotation() + FRotator(0, 90.f, 0));
 
 	FCharacterInformation* info = new FCharacterInformation();
 	FCombatStat* stat = new FCombatStat();
@@ -61,8 +61,6 @@ void ABaseHero::BeginPlay()
 void ABaseHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	UE_LOG(LogTemp, Warning, TEXT("Rotation %f, %f, %f"), GetActorRotation().Pitch, GetActorRotation().Roll, GetActorRotation().Yaw);
 
 	mSprintFunction->SetPossibleSprint(!mbIsReloading && !mbIsFire);
 	float velocity = GetVelocity().Size();

@@ -7,7 +7,7 @@
 #include "SoundMng.generated.h"
 
 
-static const char* EventSounds[] = { "Blank", "GraduallyHigh" , "GraduallyLow", "Appear", "SurpriseLow", "SurpriseMidium", "SurpriseVeryHigh", "Bat" };
+static const char* EventSounds[] = { "Blank", "GraduallyHigh" , "GraduallyLow", "Appear", "SurpriseLow", "SurpriseMidium", "SurpriseVeryHigh", "Bat", "WoodCreak", "Jumpscare_2" };
 static const char* BGM[] = { "Blank", "Main", "Mistery","Ghostly_Villa", "Frozen" };
 
 UENUM()
@@ -22,6 +22,8 @@ enum class EEventSound : uint8
 	SurpriseMidium,
 	SurpriseHigh,
 	Bat,
+	WoodCreak,
+	Jumpscare_2,
 
 	Max
 };

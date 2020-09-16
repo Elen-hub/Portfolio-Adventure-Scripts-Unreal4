@@ -19,11 +19,12 @@ public:
 	virtual void Tick(float deltaTime) override;
 protected:
 	virtual void BeginPlay() override;
+	UFUNCTION()
 	void OnTextureEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 protected:
-	UPROPERTY(BlueprintReadWrite, Category = "Texture Event")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USphereComponent* mEventCollision;
-	UPROPERTY(BlueprintReadWrite, Category = "Texture Event")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Texture Event")
 	class UTexture2D* mEventTexture;	
 };

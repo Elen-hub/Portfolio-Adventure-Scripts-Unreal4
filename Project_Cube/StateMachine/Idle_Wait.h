@@ -11,8 +11,11 @@
 class PROJECT_CUBE_API Idle_Wait : public BaseState
 {
 public:
-	Idle_Wait() {}
+	Idle_Wait(float waitTime);
 	virtual void OnStateBegin() override;
 	virtual void OnStateStay(float DeltaTime) override;
 	virtual void OnStateExit() override;;
+
+private:
+	float mRadiusPerFrame;
 };
