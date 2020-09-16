@@ -16,7 +16,6 @@
 ASpider::ASpider()
 {
 	mLeftWeaponCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("LeftCollision"));
-	mLeftWeaponCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("LeftSocket"));
 	mLeftWeaponCollision->SetGenerateOverlapEvents(false);
 	mLeftWeaponCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	mLeftWeaponCollision->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
@@ -24,7 +23,6 @@ ASpider::ASpider()
 	mLeftWeaponCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	mRightWeaponCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("RightCollision"));
-	mRightWeaponCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("RightSocket"));
 	mRightWeaponCollision->SetGenerateOverlapEvents(false);
 	mRightWeaponCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	mRightWeaponCollision->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
@@ -36,9 +34,12 @@ void ASpider::BeginPlay()
 {
 	Super::BeginPlay();
 
+	mLeftWeaponCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("LeftSocket"));
+	mRightWeaponCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("RightSocket"));
+
 	mLeftWeaponCollision->OnComponentBeginOverlap.AddDynamic(this, &ASpider::OnAttackCollisionEnter);
 	mRightWeaponCollision->OnComponentBeginOverlap.AddDynamic(this, &ASpider::OnAttackCollisionEnter);
-	
+
 	Idle_Default* idleState = new Idle_Default();
 	idleState->Init(this);
 	FunctionToStateMap.Add(ECharacterState::ECS_Idle, idleState);

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Project_Cube/User.h"
 #include "SprintFunction.h"
+#include "Project_Cube/User.h"
 #include "BaseHero.h"
 
 // Sets default values for this component's properties
